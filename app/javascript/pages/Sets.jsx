@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 // List all of the sets.  Each one should route to /set/:id.
 const Sets = () => {
@@ -26,9 +27,9 @@ const Sets = () => {
         </thead>
         <tbody>
           { sets.map((set) =>
-              <tr>
+              <tr key={set.id}>
                 <th scope="row">{set.number}</th>
-                <td>{set.name}</td>
+                <td><Link className="link-primary" to={`${set.id}`}>{set.name}</Link></td>
               </tr>
             )
           }
