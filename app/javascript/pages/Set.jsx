@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import _ from "lodash";
 
 import GunIcon from "../icons/gun_icon.svg";
@@ -51,7 +51,7 @@ const Set = () => {
                 <>
                   <tr key={`card-${blockNum}`}>
                     <td>{objectiveCard.block_number}</td>
-                    <td>{objectiveCard.name}</td>
+                    <td><Link className="link-primary" to={`/cards/${objectiveCard.id}`}>{objectiveCard.name}</Link></td>
                     <td>{objectiveCard.card_type}</td>
                     <td>{objectiveCard.cost}</td>
                     <td><GunIcon /><GunIconWhite /></td>
@@ -72,7 +72,7 @@ const Set = () => {
                     nonObjectiveCards.map((card) =>
                       <tr className="collapse" id={`collapse-${blockNum}`}>
                         <td>{card.block_number}</td>
-                        <td>&nbsp;&nbsp;{card.name}</td>
+                        <td>&nbsp;&nbsp;<Link className="link-primary" to={`/cards/${card.id}`}>{card.name}</Link></td>
                         <td>{card.card_type}</td>
                         <td>{card.cost}</td>
                         <td><GunIcon /><GunIconWhite /></td>
