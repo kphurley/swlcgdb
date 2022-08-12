@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <set xmlns:noNamespaceSchemaLocation="CardSet.xsd"
-     name="Core Set"
+     name="Core"
      id="3f4df791-7e9f-4542-8d12-fa87a5a61fef"
      gameId="d5cf89e5-1984-4873-8ae0-f06eea411bb3"
      gameVersion="2.0.0.0"
