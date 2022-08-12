@@ -2,7 +2,7 @@ import _ from "lodash";
 
 export default function getCardImageUrl(cardData) {
   const BASE_IMAGE_URL = "http://www.cardgamedb.com/forums/uploads/sw";
-  console.log(cardData);
+
   /*
     Starting with the set “darkness and light”, the images are named by "set number"
       (ffg_SWC<set-number>_<block>-<block_number>.png)
