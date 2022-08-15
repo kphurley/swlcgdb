@@ -11,7 +11,7 @@ const CardPanel = ({ cardData, includeFlavorText}) => {
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <h3 className="panel-title card-name">{ `${uniqueNameModifier}${cardData.name}` }</h3>
+        <span className="panel-title card-name">{ `${uniqueNameModifier}${cardData.name}` }</span>
       </div>
       <div className="panel-body">
         <div className="card-force-pips">
@@ -29,8 +29,8 @@ const CardPanel = ({ cardData, includeFlavorText}) => {
         </div>
         <div className="card-text">
           { 
-            cardData.text?.split("\r\n").map((line) =>
-              <div className="card-text-line">{ line }</div>
+            cardData.text?.split("\r\n").map((line, idx) =>
+              <div className="card-text-line" key={`card-${cardData.id}-line-${idx}`}>{ line }</div>
             )
           }
         </div>

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import ReactTooltip from "react-tooltip";
 import _ from "lodash";
+
+import CardPanel from "../components/CardPanel";
 
 import GunIcon from "../icons/gun_icon.svg";
 import GunIconWhite from "../icons/gun_icon_edge_border.svg";
@@ -46,8 +49,28 @@ const CardList = () => {
         <tbody>
           {
             cardList.map((card) =>
-              <tr>
-                <td><Link className="link-primary" to={`/cards/${card.id}`}>{card.name}</Link></td>
+              <tr key={`card-${card.id}`}>
+                <td>
+                  <Link
+                    className="link-primary"
+                    data-tip
+                    data-for={`card-${card.id}`}
+                    to={`/cards/${card.id}`}
+                  >
+                    {card.name}
+                  </Link>
+                  <ReactTooltip
+                    backgroundColor="white"
+                    border
+                    borderColor="black"
+                    className="card-tooltip"
+                    textColor="black"
+                    id={`card-${card.id}`}
+                    place="right"
+                  >
+                    <CardPanel cardData={ card } />
+                  </ReactTooltip>
+                </td>
                 <td>{card.card_type}</td>
                 <td>{card.cost}</td>
                 <td><GunIcon /><GunIconWhite /></td>

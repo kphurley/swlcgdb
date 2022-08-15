@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import ReactTooltip from "react-tooltip";
 import _ from "lodash";
+
+import CardPanel from "../components/CardPanel";
 
 import GunIcon from "../icons/gun_icon.svg";
 import GunIconWhite from "../icons/gun_icon_edge_border.svg";
@@ -48,8 +51,28 @@ const Set = () => {
 
               return (
                 <>
-                  <tr key={`card-${blockNum}`}>
-                    <td><Link className="link-primary" to={`/cards/${objectiveCard.id}`}>{objectiveCard.name}</Link></td>
+                  <tr>
+                    <td>
+                      <Link
+                        className="link-primary"
+                        data-tip
+                        data-for={`card-${objectiveCard.id}`}
+                        to={`/cards/${objectiveCard.id}`}
+                      >
+                        {objectiveCard.name}
+                      </Link>
+                      <ReactTooltip
+                        backgroundColor="white"
+                        border
+                        borderColor="black"
+                        className="card-tooltip"
+                        textColor="black"
+                        id={`card-${objectiveCard.id}`}
+                        place="right"
+                      >
+                        <CardPanel cardData={ objectiveCard } />
+                      </ReactTooltip>
+                    </td>
                     <td>{objectiveCard.card_type}</td>
                     <td>{objectiveCard.cost}</td>
                     <td><GunIcon /><GunIconWhite /></td>
@@ -68,8 +91,27 @@ const Set = () => {
                   </tr>
                   {
                     nonObjectiveCards.map((card) =>
-                      <tr className="collapse" id={`collapse-${blockNum}`}>
-                        <td>&nbsp;&nbsp;<Link className="link-primary" to={`/cards/${card.id}`}>{card.name}</Link></td>
+                      <tr className="collapse" id={`collapse-${blockNum}`} key={`card-row-${card.id}`}>
+                        <td>&nbsp;&nbsp;<Link
+                          className="link-primary"
+                          data-tip
+                          data-for={`card-${card.id}`}
+                          to={`/cards/${card.id}`}
+                          >
+                            {card.name}
+                          </Link>
+                          <ReactTooltip
+                            backgroundColor="white"
+                            border
+                            borderColor="black"
+                            className="card-tooltip"
+                            textColor="black"
+                            id={`card-${card.id}`}
+                            place="right"
+                          >
+                            <CardPanel cardData={ card } />
+                          </ReactTooltip>
+                        </td>
                         <td>{card.card_type}</td>
                         <td>{card.cost}</td>
                         <td><GunIcon /><GunIconWhite /></td>
