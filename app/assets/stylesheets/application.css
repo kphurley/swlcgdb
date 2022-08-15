@@ -20,7 +20,16 @@
   position: absolute;
 }
 
+.card-name {
+  font-size: 1.5em;
+}
+
 .card-text {
   border-left: 1px solid #888;
   padding-left: 8px;
+}
+
+.card-tooltip {
+  box-shadow: 0px 0px 4px grey;
+  max-width: 400px;
 }
