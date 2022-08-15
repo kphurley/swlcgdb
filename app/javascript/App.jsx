@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Footer from "./Footer";
 import TopNavigation from "./TopNavigation";
-import { Card, Home, Set, Sets } from "./pages"
+import { Card, CardList, Home, Set, Sets } from "./pages"
 
 const App = () =>
   <div className="App">
@@ -16,6 +16,7 @@ const App = () =>
           <Route path="cards/:id" element={<Card />} />
           <Route path="sets/:id" element={<Set />} />
           <Route path="sets" element={<Sets />} />
+          <Route path="search/:searchString" element={<CardList />} />
         </Routes>
       </div>
       <Footer />

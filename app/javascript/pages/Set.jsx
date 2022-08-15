@@ -29,14 +29,13 @@ const Set = () => {
       <table className="table table-sm">
         <thead>
           <tr>
-            <th scope="col">Block #</th>
             <th>Name</th>
             <th>Type</th>
-            <th>Cost</th>
+            <th>C.</th>
             <th>Icons</th>
-            <th>Force</th>
-            <th>Damage Cap.</th>
-            <th>Resources</th>
+            <th>F.</th>
+            <th>D.</th>
+            <th>R.</th>
             <th>{"  "}</th>
           </tr>
         </thead>
@@ -50,7 +49,6 @@ const Set = () => {
               return (
                 <>
                   <tr key={`card-${blockNum}`}>
-                    <td>{objectiveCard.block_number}</td>
                     <td><Link className="link-primary" to={`/cards/${objectiveCard.id}`}>{objectiveCard.name}</Link></td>
                     <td>{objectiveCard.card_type}</td>
                     <td>{objectiveCard.cost}</td>
@@ -71,7 +69,6 @@ const Set = () => {
                   {
                     nonObjectiveCards.map((card) =>
                       <tr className="collapse" id={`collapse-${blockNum}`}>
-                        <td>{card.block_number}</td>
                         <td>&nbsp;&nbsp;<Link className="link-primary" to={`/cards/${card.id}`}>{card.name}</Link></td>
                         <td>{card.card_type}</td>
                         <td>{card.cost}</td>

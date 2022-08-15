@@ -19,3 +19,8 @@
   transform: rotate(90deg);
   position: absolute;
 }
+
+.card-text {
+  border-left: 1px solid #888;
+  padding-left: 8px;
+}
