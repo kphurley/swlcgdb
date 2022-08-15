@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 /*
   Separate traits into a joined string ending in periods, removing "Unique"
 */
