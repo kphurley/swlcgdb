@@ -58,50 +58,63 @@ files_to_process.each do |file|
     set.is_custom = true
     set.save!
   end
+end
 
-  # These are the IDs cardgamedb uses to store images
-  card_game_db_names_to_ids = [
-    {:name=>"Core Set", :cgdb_number=>1},
-    {:name=>"Desolation of Hoth", :cgdb_number=>2},
-    {:name=>"The Search For Skywalker", :cgdb_number=>3},
-    {:name=>"A Dark Time", :cgdb_number=>4},
-    {:name=>"Assault on Echo Base", :cgdb_number=>5},
-    {:name=>"The Battle of Hoth", :cgdb_number=>6},
-    {:name=>"Escape from Hoth", :cgdb_number=>7},
-    {:name=>"Edge of Darkness", :cgdb_number=>8},
-    {:name=>"Balance of the Force", :cgdb_number=>9},
-    {:name=>"Heroes and Legends", :cgdb_number=>10},
-    {:name=>"Lure of the Dark Side", :cgdb_number=>11},
-    {:name=>"Knowledge and Defense", :cgdb_number=>12},
-    {:name=>"Join Us or Die", :cgdb_number=>13},
-    {:name=>"It Binds All Things", :cgdb_number=>14},
-    {:name=>"Darkness and Light", :cgdb_number=>15},
-    {:name=>"Ready for Takeoff", :cgdb_number=>16},
-    {:name=>"Draw Their Fire", :cgdb_number=>17},
-    {:name=>"Evasive Maneuvers", :cgdb_number=>18},
-    {:name=>"Attack Run", :cgdb_number=>19},
-    {:name=>"Chain of Command", :cgdb_number=>20},
-    {:name=>"Jump to Lightspeed", :cgdb_number=>21},
-    {:name=>"Between the Shadows", :cgdb_number=>22},
-    {:name=>"Imperial Entanglements", :cgdb_number=>23},
-    {:name=>"Solo's Command", :cgdb_number=>24},
-    {:name=>"New Alliances", :cgdb_number=>25},
-    {:name=>"The Forest Moon", :cgdb_number=>26},
-    {:name=>"So Be It", :cgdb_number=>27},
-    {:name=>"Press the Attack", :cgdb_number=>28},
-    {:name=>"Redemption and Return", :cgdb_number=>29},
-    {:name=>"Galactic Ambitions", :cgdb_number=>30},
-    {:name=>"Ancient Rivals", :cgdb_number=>31},
-    {:name=>"A Wretched Hive", :cgdb_number=>32},
-    {:name=>"Meditation and Mastery", :cgdb_number=>33},
-    {:name=>"Scrap Metal", :cgdb_number=>34},
-    {:name=>"Power of the Force", :cgdb_number=>35},
-    {:name=>"Technological Terror", :cgdb_number=>36},
-    {:name=>"Allies of Necessity", :cgdb_number=>37},
-    {:name=>"Aggressive Negotiations", :cgdb_number=>38},
-    {:name=>"Desperate Circumstances", :cgdb_number=>39},
-    {:name=>"Swayed by the Dark Side", :cgdb_number=>40},
-    {:name=>"Trust in the Force", :cgdb_number=>41},
-    {:name=>"Promise of Power", :cgdb_number=>42}
-  ]
+# These are the IDs cardgamedb uses to store images
+# We're going to use these to store the release_order value
+# This is needed for a variety of views
+card_game_db_names_to_release_order = [
+  {:name=>"Core", :cgdb_number=>1},
+  {:name=>"The Desolation of Hoth", :cgdb_number=>2},
+  {:name=>"The Search For Skywalker", :cgdb_number=>3},
+  {:name=>"A Dark Time", :cgdb_number=>4},
+  {:name=>"Assault on Echo Base", :cgdb_number=>5},
+  {:name=>"The Battle of Hoth", :cgdb_number=>6},
+  {:name=>"Escape from Hoth", :cgdb_number=>7},
+  {:name=>"Edge of Darkness", :cgdb_number=>8},
+  {:name=>"Balance of the Force", :cgdb_number=>9},
+  {:name=>"Heroes and Legends", :cgdb_number=>10},
+  {:name=>"Lure of the Dark Side", :cgdb_number=>11},
+  {:name=>"Knowledge and Defense", :cgdb_number=>12},
+  {:name=>"Join Us or Die", :cgdb_number=>13},
+  {:name=>"It Binds All Things", :cgdb_number=>14},
+  {:name=>"Darkness and Light", :cgdb_number=>15},
+  {:name=>"Ready for Takeoff", :cgdb_number=>16},
+  {:name=>"Draw Their Fire", :cgdb_number=>17},
+  {:name=>"Evasive Maneuvers", :cgdb_number=>18},
+  {:name=>"Attack Run", :cgdb_number=>19},
+  {:name=>"Chain of Command", :cgdb_number=>20},
+  {:name=>"Jump to Lightspeed", :cgdb_number=>21},
+  {:name=>"Between the Shadows", :cgdb_number=>22},
+  {:name=>"Imperial Entanglements", :cgdb_number=>23},
+  {:name=>"Solo's Command", :cgdb_number=>24},
+  {:name=>"New Alliances", :cgdb_number=>25},
+  {:name=>"The Forest Moon", :cgdb_number=>26},
+  {:name=>"So Be It", :cgdb_number=>27},
+  {:name=>"Press the Attack", :cgdb_number=>28},
+  {:name=>"Redemption and Return", :cgdb_number=>29},
+  {:name=>"Galactic Ambitions", :cgdb_number=>30},
+  {:name=>"Ancient Rivals", :cgdb_number=>31},
+  {:name=>"A Wretched Hive", :cgdb_number=>32},
+  {:name=>"Meditation and Mastery", :cgdb_number=>33},
+  {:name=>"Scrap Metal", :cgdb_number=>34},
+  {:name=>"Power of the Force", :cgdb_number=>35},
+  {:name=>"Technological Terror", :cgdb_number=>36},
+  {:name=>"Allies of Necessity", :cgdb_number=>37},
+  {:name=>"Aggressive Negotiations", :cgdb_number=>38},
+  {:name=>"Desperate Circumstances", :cgdb_number=>39},
+  {:name=>"Swayed by the Dark Side", :cgdb_number=>40},
+  {:name=>"Trust in the Force", :cgdb_number=>41},
+  {:name=>"Promise of Power", :cgdb_number=>42}
+]
+
+# This is done one-by-one to root out issues
+card_game_db_names_to_release_order.each do |hsh|
+  found_set = CardSet.find_by(name: hsh[:name])
+  if found_set.nil?
+    puts "WARNING - SET NAME #{hsh[:name]} WAS NOT FOUND AND THE RELEASE ORDER NOT SEEDED"
+  else
+    found_set.release_order = hsh[:cgdb_number]
+    found_set.save!
+  end
 end
