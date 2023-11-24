@@ -5,8 +5,7 @@ import _ from "lodash";
 
 import CardPanel from "../components/CardPanel";
 
-import GunIcon from "../icons/gun_icon.svg";
-import GunIconWhite from "../icons/gun_icon_edge_border.svg";
+import getIconsFromIconString from "../util/getIconsFromIconString";
 
 // List all of the cards in a card search result.
 // (This is so similar to Set, consider combining them)
@@ -73,7 +72,7 @@ const CardList = () => {
                 </td>
                 <td>{card.card_type}</td>
                 <td>{card.cost}</td>
-                <td><GunIcon /><GunIconWhite /></td>
+                <td>{getIconsFromIconString(card.combat_icons)}</td>
                 <td>{card.force}</td>
                 <td>{card.damage_capacity}</td>
                 <td>{card.resources}</td>
