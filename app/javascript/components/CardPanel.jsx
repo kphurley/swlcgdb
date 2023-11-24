@@ -1,6 +1,8 @@
 import React from "react";
+import _ from "lodash";
 
 import { formatCardTraits } from "../util/textFormatters";
+import getIconsFromIconString from "../util/getIconsFromIconString";
 
 // Component to handle displaying Card vitals
 // Should be reused by Card page and Card popover
@@ -21,8 +23,7 @@ const CardPanel = ({ cardData, includeFlavorText}) => {
           { `${cardData.affiliation}. ${cardData.card_type}. Cost: ${cardData.cost}` }
         </div>
         <div className="card-combat-icons">
-          {/* TODO - Translate this text to icons */}
-          { cardData.combat_icons }
+          { getIconsFromIconString(cardData.combat_icons) }
         </div>
         <div className="card-traits">
           <b><em>{ formattedTraits }</em></b>

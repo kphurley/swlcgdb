@@ -17,6 +17,8 @@ const Card = () => {
     })
   }, [])
 
+  if (Object.keys(cardData).length === 0) return <></>;
+
   return (
     <div className="container">
       <div className="row">
