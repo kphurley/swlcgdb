@@ -33,3 +33,11 @@
   box-shadow: 0px 0px 4px grey;
   max-width: 400px;
 }
+
+.form-group {
+  padding: 8px;
+}
+
+.padding-left-16 {
+  padding-left: 16px;
+}

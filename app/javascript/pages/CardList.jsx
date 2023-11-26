@@ -3,6 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import ReactTooltip from "react-tooltip";
 import _ from "lodash";
 
+import makeApiRequest from "../api/makeApiRequest";
+
 import CardPanel from "../components/CardPanel";
 
 import getIconsFromIconString from "../util/getIconsFromIconString";
@@ -14,20 +16,15 @@ const CardList = () => {
   const params = useParams();
 
   useEffect(() => {
-    const fetchOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-      },
-      body: JSON.stringify({ searchString: params.searchString })
-    }
-
-    fetch("/api/search", fetchOptions).then((data) => {
-      return data.json();
-    }).then((_list) => {
+    async function searchForCards() {
+      const _list = await makeApiRequest("/api/search", {
+        method: 'POST',
+        body: { searchString: params.searchString },
+      });
       setCardList(_list);
-    })
+    };
+
+    searchForCards();
   }, [params.searchString])
 
   return (

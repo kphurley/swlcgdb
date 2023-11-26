@@ -1,4 +1,6 @@
 class Api::CardSetsController < ApplicationController
+  skip_before_action :authenticate_request
+
   def index
     card_sets = CardSet.where.not(release_order: nil).pluck(:name, :id, :release_order)
 

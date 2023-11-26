@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import makeApiRequest from "../api/makeApiRequest";
+
 import CardInfo from "../components/CardPanel";
 import getCardImageUrl from "../util/getCardImageUrl";
 
@@ -10,11 +12,12 @@ const Card = () => {
   const params = useParams();
 
   useEffect(() => {
-    fetch(`/api/cards/${params.id}`).then((data) => {
-      return data.json();
-    }).then((_card) => {
+    async function getCardById() {
+      const _card = await makeApiRequest(`/api/cards/${params.id}`);
       setCardData(_card);
-    })
+    };
+
+    getCardById();
   }, [])
 
   if (Object.keys(cardData).length === 0) return <></>;

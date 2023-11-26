@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import makeApiRequest from "../api/makeApiRequest";
+
 // List all of the sets.  Each one should route to /set/:id.
 const Sets = () => {
   const [ sets, setSets ] = useState([])
 
   useEffect(() => {
-    fetch("/api/card_sets").then((data) => {
-      return data.json();
-    }).then((_sets) => {
+    async function getCardSets() {
+      const _sets = await makeApiRequest("/api/card_sets");
       setSets(_sets);
-    })
+    }
+
+    getCardSets();
   }, [])
 
   sets.sort((a, b) => a.number - b.number)
