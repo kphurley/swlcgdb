@@ -3,6 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import ReactTooltip from "react-tooltip";
 import _ from "lodash";
 
+import makeApiRequest from "../api/makeApiRequest";
+
 import CardPanel from "../components/CardPanel";
 
 import getIconsFromIconString from "../util/getIconsFromIconString";
@@ -13,11 +15,12 @@ const Set = () => {
   const params = useParams();
 
   useEffect(() => {
-    fetch(`/api/card_sets/${params.id}`).then((data) => {
-      return data.json();
-    }).then((_set) => {
+    async function getCardSetById() {
+      const _set = await makeApiRequest(`/api/card_sets/${params.id}`);
       setSetData(_set);
-    })
+    };
+
+    getCardSetById();
   }, [])
 
   const setCardBlocks = setData.card_blocks || []

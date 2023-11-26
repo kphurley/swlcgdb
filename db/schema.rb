@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_10_020758) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_25_163241) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -55,6 +55,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_10_020758) do
     t.datetime "updated_at", null: false
     t.index ["card_block_id"], name: "index_cards_on_card_block_id"
     t.index ["name"], name: "index_cards_on_name"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.string "username"
+    t.string "email"
+    t.string "password_digest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "card_blocks", "card_sets"
