@@ -6,7 +6,7 @@ import AuthProvider, { AuthContext } from "./components/AuthProvider";
 import Footer from "./components/Footer";
 import TopNavigation from "./components/TopNavigation";
 
-import { Card, CardList, Home, Login, MyDecks, RegisterNewUser, Set, Sets } from "./pages";
+import { Card, CardList, Deck, Home, Login, MyDecks, RegisterNewUser, Set, Sets } from "./pages";
 
 const ProtectedRoute = ({ children }) => {
   const { token } = useContext(AuthContext);
@@ -27,6 +27,7 @@ const App = () =>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="cards/:id" element={<Card />} />
+            <Route path="decks/:id" element={<Deck />} />
             <Route path="signIn" element={<Login />} />
             <Route path="register" element={<RegisterNewUser />} />
             <Route path="sets/:id" element={<Set />} />
