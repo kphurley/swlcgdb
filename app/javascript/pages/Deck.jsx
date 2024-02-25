@@ -7,41 +7,39 @@ import makeApiRequest from "../api/makeApiRequest";
 
 import CardPanel from "../components/CardPanel";
 
-import getIconsFromIconString from "../util/getIconsFromIconString";
-
-// List all of the cards in a set.
-const Set = () => {
-  const [ setData, setSetData ] = useState({})
+// List all of the cards in a deck.
+// SO similar to Set.  TODO - Extract the common bits
+const Deck = () => {
+  const [ deckData, setDeckData ] = useState({})
   const params = useParams();
 
   useEffect(() => {
-    async function getCardSetById() {
-      const _set = await makeApiRequest(`/api/card_sets/${params.id}`);
-      setSetData(_set);
+    async function getDeckById() {
+      const _set = await makeApiRequest(`/api/decks/${params.id}`);
+      setDeckData(_set);
     };
 
-    getCardSetById();
+    getDeckById();
   }, [])
 
-  // TODO - Do we need this?
-  const setCardBlocks = setData.card_blocks || []
-  setCardBlocks.sort((a, b) => a.block - b.block)
+  const deckCards = deckData.cards || []
+  const cardsByBlock = _.groupBy(deckCards, 'block')
 
-  const setCards = setData.cards || []
-  const cardsByBlock = _.groupBy(setCards, 'block')
+  const getQuantityOfObjective = (objectiveCard) => {
+    const foundBlock = deckData.card_blocks.find((blk) => blk.block == objectiveCard.block)
+
+    return foundBlock ? foundBlock.quantity : 0;
+  };
 
   return (
     <div className="container">
+      <h2>{ deckData.name }</h2>
+      <h4>Objectives</h4>
       <table className="table table-sm">
         <thead>
           <tr>
+            <th>Quantity</th>
             <th>Name</th>
-            <th>Type</th>
-            <th>C.</th>
-            <th>Icons</th>
-            <th>F.</th>
-            <th>D.</th>
-            <th>R.</th>
             <th>{"  "}</th>
           </tr>
         </thead>
@@ -55,6 +53,9 @@ const Set = () => {
               return (
                 <>
                   <tr>
+                    <td>
+                      {getQuantityOfObjective(objectiveCard)}
+                    </td>
                     <td>
                       <Link
                         className="link-primary"
@@ -76,12 +77,6 @@ const Set = () => {
                         <CardPanel cardData={ objectiveCard } />
                       </ReactTooltip>
                     </td>
-                    <td>{objectiveCard.card_type}</td>
-                    <td>{objectiveCard.cost}</td>
-                    <td>{getIconsFromIconString(objectiveCard.combat_icons)}</td>
-                    <td>{objectiveCard.force}</td>
-                    <td>{objectiveCard.damage_capacity}</td>
-                    <td>{objectiveCard.resources}</td>
                     <td>
                       <i
                         className="bi bi-chevron-right collapsed"
@@ -95,6 +90,8 @@ const Set = () => {
                   {
                     nonObjectiveCards.map((card) =>
                       <tr className="collapse" id={`collapse-${blockNum}`} key={`card-row-${card.id}`}>
+                        <td>
+                        </td>
                         <td>&nbsp;&nbsp;<Link
                           className="link-primary"
                           data-tip
@@ -115,15 +112,56 @@ const Set = () => {
                             <CardPanel cardData={ card } />
                           </ReactTooltip>
                         </td>
-                        <td>{card.card_type}</td>
-                        <td>{card.cost}</td>
-                        <td>{getIconsFromIconString(card.combat_icons)}</td>
-                        <td>{card.force}</td>
-                        <td>{card.damage_capacity}</td>
-                        <td>{card.resources}</td>
                       </tr>
                     )
                   }
+                </>
+              )
+            })
+          }
+        </tbody>
+      </table>
+
+
+      <h4>Cards</h4>
+      <table className="table table-sm">
+        <thead>
+          <tr>
+            <th>Quantity</th>
+            <th>Name</th>
+            <th>{"  "}</th>
+          </tr>
+        </thead>
+        <tbody>
+          { _.map(deckCards, (card) => {
+              return (
+                <>
+                  <tr>
+                    <td>
+                      {card.quantity}
+                    </td>
+                    <td>
+                      <Link
+                        className="link-primary"
+                        data-tip
+                        data-for={`card-${card.id}`}
+                        to={`/cards/${card.id}`}
+                      >
+                        {card.name}
+                      </Link>
+                      <ReactTooltip
+                        backgroundColor="white"
+                        border
+                        borderColor="black"
+                        className="card-tooltip"
+                        textColor="black"
+                        id={`card-${card.id}`}
+                        place="right"
+                      >
+                        <CardPanel cardData={ card } />
+                      </ReactTooltip>
+                    </td>
+                  </tr>
                 </>
               )
             })
@@ -134,4 +172,4 @@ const Set = () => {
   );
 };
 
-export default Set;
+export default Deck;
