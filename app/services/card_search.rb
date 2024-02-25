@@ -5,11 +5,11 @@
 #  t:type
 #  x:text
 
-# The default option (no option) should search the card name 
-
-# This class DOES NOT assume the input is sanitized, and should sanitize each input
+# The default option (no option) should search the card name
 
 class CardSearch
+  include ActiveRecord::Sanitization::ClassMethods
+
   def self.perform(search_input)
     parsed_options = parse_input_to_options(search_input)
 
@@ -24,8 +24,6 @@ class CardSearch
       end
     end
 
-    puts relation.to_sql
-
     relation
   end
 
@@ -36,15 +34,17 @@ class CardSearch
   end
 
   def self.map_options_to_conditions(flag, value = nil)
+    sanitized_value = Card.sanitize_search_input(value) if value
+
     case flag
     when 'c'
-      ["cost = ?", value]
+      ["cost = ?", sanitized_value]
     when 'k'
-      ["traits ILIKE ?", "%#{value}%"]
+      ["traits ILIKE ?", "%#{sanitized_value}%"]
     when 't'
-      ["card_type ILIKE ?", "%#{value}%"]
+      ["card_type ILIKE ?", "%#{sanitized_value}%"]
     when 'x'
-      ["text ILIKE ?", "%#{value}%"]
+      ["text ILIKE ?", "%#{sanitized_value}%"]
     else
       ["name ILIKE ?", "%#{flag}%"]
     end
