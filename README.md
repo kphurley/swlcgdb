@@ -5,7 +5,7 @@ This is a deck building app for Star Wars: The Card Game.  This project is inspi
 
 ## Hacking on this Project
 ### You need
-- Ruby 3.0
+- Ruby 3.2
 - Rails 7
 - Postgres 14
 
