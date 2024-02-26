@@ -10,10 +10,10 @@ export default async function makeApiRequest(uri, options = {}) {
     credentials: 'same-origin'
   };
 
-  if(options?.method === 'POST') {
+  if(options?.method !== 'GET') {
     fetchOptions = {
       ...fetchOptions,
-      method: 'POST',
+      method: options?.method,
       body: JSON.stringify(options.body),
     }
   }

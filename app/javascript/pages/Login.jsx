@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { AuthContext } from "../components/AuthProvider";
 
@@ -30,6 +30,7 @@ const Login = () => {
       await onLogin(loginPayload);
       navigate("/sets");
     } catch(err) {
+      // TODO - Better handle this!!
       console.error("ERROR!", err);
     }
   }, []);
@@ -60,6 +61,9 @@ const Login = () => {
         </div>
         <button className="btn btn-primary" onClick={(evt) => onSubmit(evt, createUserPayload)}>Submit</button>
       </form>
+      <div>
+        Forgot password?  <Link className="nav-link" to="/forgotPassword">Click here</Link>
+      </div>
     </div>
   );
 }
