@@ -1,8 +1,4 @@
 Rails.application.routes.draw do
-  get 'password_resets/new'
-  get 'password_resets/create'
-  get 'password_resets/edit'
-  get 'password_resets/update'
   root 'home#index'
 
   post 'login', to: 'authentication#login'
@@ -10,7 +6,7 @@ Rails.application.routes.draw do
   namespace 'api' do
     resources :cards, only: [:show]
     resources :card_sets, only: [:index, :show]
-    resources :decks, only: [:show]  # TODO - some kind of index based on search params 
+    resources :decks, only: [:show, :create, :update]  # TODO - some kind of index action based on search params
     resources :search, only: [:create]
     resources :users, except: [:index]  # Avoid route showing all users
 

@@ -19,6 +19,26 @@ class Deck < ApplicationRecord
       cards: cards_as_hashes_with_quantity,
     }
   end
+
+  def update_from_json!(deck_json)
+    if deck_json[:card_blocks]
+      Deck.transaction do
+        destroy_all_card_blocks
+
+        # need to alias id as card_block_id, add deck_id, and keep quantity
+        formatted_card_blocks = deck_json[:card_blocks].map do |blk|
+          blk[:card_block_id] = blk[:id]
+          blk[:deck_id] = self.id
+          blk.slice(:card_block_id, :deck_id, :quantity)
+        end
+
+        puts formatted_card_blocks
+        DeckCardBlock.create!(formatted_card_blocks)
+      end
+    end
+
+    self.update!(deck_json.slice(:name, :description))
+  end
   
   def card_blocks_as_hashes_with_quantity
     card_block_attributes = CardBlock.attribute_names - ["created_at", "updated_at"]
@@ -68,6 +88,6 @@ class Deck < ApplicationRecord
   end
 
   def destroy_all_card_blocks
-    self.deck_card_blocks.destroy_all
+    self.deck_card_blocks.destroy_all if self.deck_card_blocks.any?
   end
 end
