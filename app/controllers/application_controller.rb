@@ -3,6 +3,7 @@
 class ApplicationController < ActionController::Base
   include JsonWebToken
 
+  around_action :rescue_errors
   before_action :authenticate_request
 
   private
@@ -12,5 +13,12 @@ class ApplicationController < ActionController::Base
     header = header.split(" ").last if header
     decoded = jwt_decode(header)
     @current_user = User.find(decoded[:user_id])
+  end
+
+  def rescue_errors
+    yield
+  rescue StandardError => exception
+    puts exception.inspect
+    render json: { error: 'Internal Server Error' }, status: 500
   end
 end
