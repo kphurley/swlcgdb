@@ -39,10 +39,10 @@ class Api::DecksController < ApplicationController
   # So our flows must account for this
 
   def update
+    # Note that this will raise if the deck isn't found, which will return a 404
     found_deck = Deck.find(params[:id])
 
-    render json: { error: 'Deck not found' }, status: :not_found if found_deck.nil?
-    render json: { error: 'unauthorized' }, status: :unauthorized if found_deck.user_id != @current_user.id
+    raise 'unauthorized' if found_deck.user_id != @current_user.id
 
     permitted_params = params.permit(:name, :description, { card_blocks: [:id, :quantity]})
     found_deck.update_from_json!(permitted_params)

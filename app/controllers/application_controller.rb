@@ -17,6 +17,8 @@ class ApplicationController < ActionController::Base
 
   def rescue_errors
     yield
+  rescue ActiveRecord::RecordNotFound => exception
+    render json: { error: 'Not found' }, status: 404
   rescue StandardError => exception
     puts exception.inspect
     render json: { error: 'Internal Server Error' }, status: 500
