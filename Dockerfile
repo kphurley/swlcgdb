@@ -6,7 +6,6 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - && \
 
 RUN apt update
 
-#RUN apt-get install -y npm
 
 COPY package.json package-lock.json ./
 
