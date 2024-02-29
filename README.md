@@ -5,16 +5,25 @@ This is a deck building app for Star Wars: The Card Game.  This project is inspi
 
 ## Hacking on this Project
 ### You need
-- Ruby 3.2
-- Rails 7
-- Postgres 14
+
+1. For local deployment
+    - Ruby 3.2
+    - Rails 7
+    - Postgres 14
+2. For docker
+    - Docker
+    - Docker Compose
 
 ### Getting it running
-- clone
-- configure your `database.yml` as needed
-- `bin/rails db:migrate` to set the db up
-- `bin/rails db:seed` to seed the DB with data from the cardXml directory (taken from OCTGN)
-- `bin/dev` to start it all up
+1. - clone
+    - configure your `database.yml` as needed
+    - `bin/rails db:migrate` to set the db up
+    - `bin/rails db:seed` to seed the DB with data from the cardXml directory (taken from OCTGN)
+    - `bin/dev` to start it all up
+    - visit `localhost:3000` in your browser
+
+2. Alternatively, you can use the `docker-compose.yml` file to get a development environment up and running.  Just run `docker compose up` and you should be good to go.
+
 
 ### Other info
 - Feel free to submit issues if you're interested in some functionality this is missing.
