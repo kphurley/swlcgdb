@@ -1,12 +1,12 @@
 FROM ruby:3.2
 
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get update -qq && apt-get install -y nodejs && \
     node --version
 
 RUN apt update
 
-RUN apt-get install -y npm
+#RUN apt-get install -y npm
 
 COPY package.json package-lock.json ./
 
