@@ -1,5 +1,6 @@
 class Deck < ApplicationRecord
   belongs_to :user
+  belongs_to :affiliation
 
   has_many :deck_card_blocks
   has_many :card_blocks, through: :deck_card_blocks
@@ -17,6 +18,9 @@ class Deck < ApplicationRecord
       description: description,
       card_blocks: card_blocks_as_hashes_with_quantity,
       cards: cards_as_hashes_with_quantity,
+      affiliation: affiliation.as_json.except("created_at", "updated_at"),
+      created_at: created_at,
+      updated_at: updated_at,
     }
   end
 
