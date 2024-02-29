@@ -84,3 +84,5 @@ production:
   database: swlcgdb_production
   username: swlcgdb
   password: <%= ENV["SWLCGDB_DATABASE_PASSWORD"] %>
+  host: db
+  port: 5432

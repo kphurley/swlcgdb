@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: swlcgdb
+      POSTGRES_PASSWORD: ${SWLCGDB_DATABASE_PASSWORD}
+      POSTGRES_DB: swlcgdb_production
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    command: bash -c "rm -f /myapp/tmp/pids/server.pid && bin/rails db:migrate && bin/rails db:seed && bin/dev"
+    volumes:
+      - .:/myapp
+    ports:
+      - "3000:3000"
+    environment:
+      SWLCGDB_DATABASE_PASSWORD: ${SWLCGDB_DATABASE_PASSWORD}
+      DATABASE_URL: ${DATABASE_URL}
+      RAILS_ENV: production bundle exec rake assets:precompile
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
