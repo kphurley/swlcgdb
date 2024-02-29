@@ -13,21 +13,23 @@ COPY package.json package-lock.json ./
 # Install dependencies
 RUN npm ci
 
-# Install Yarn (not used, but fix for the error)
+
+# Install Yarn (not used, but fix)
 RUN npm install -g yarn
 
+
+# Install PostgreSQL client
 RUN apt-get install -y postgresql-client
 
-WORKDIR /
+WORKDIR /app
 
-COPY Gemfile ./Gemfile
-COPY Gemfile.lock ./Gemfile.lock
+
+COPY Gemfile /app/Gemfile
+COPY Gemfile.lock /app/Gemfile.lock
 
 RUN bundle install
 
-
-# Copy the main application
-COPY . ./
+COPY . /app
 
 EXPOSE 3000
 
