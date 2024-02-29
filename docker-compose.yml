@@ -13,9 +13,9 @@ services:
 
   web:
     build: .
-    command: bash -c "rm -f /myapp/tmp/pids/server.pid && bin/rails db:migrate && bin/rails db:seed && bin/dev"
+    command: bash -c "rm -f /app/tmp/pids/server.pid && bin/rails db:migrate && bin/rails db:seed && bin/dev"
     volumes:
-      - .:/myapp
+      - .:/app
     ports:
       - "3000:3000"
     environment:
