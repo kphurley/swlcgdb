@@ -18,7 +18,18 @@ class Deck < ApplicationRecord
       description: description,
       card_blocks: card_blocks_as_hashes_with_quantity,
       cards: cards_as_hashes_with_quantity,
-      affiliation: affiliation.as_json.except("created_at", "updated_at"),
+      affiliation: affiliation.as_json&.except("created_at", "updated_at"),
+      created_at: created_at,
+      updated_at: updated_at,
+    }
+  end
+
+  def minimal_json
+    {
+      id: id,
+      name: name,
+      description: description,
+      affiliation: affiliation.as_json&.except("created_at", "updated_at"),
       created_at: created_at,
       updated_at: updated_at,
     }
