@@ -28,15 +28,15 @@ const App = () =>
             <Route path="/" element={<Pages.Home />} />
             <Route path="cards/:id" element={<Pages.Card />} />
             <Route path="createDeck" element={ 
-              // <ProtectedRoute>
+              <ProtectedRoute>
                 <Pages.CreateDeck />
-              // </ProtectedRoute>
+              </ProtectedRoute>
             } />
             <Route path="decks/:id" element={<Pages.Deck />} />
             <Route path="editDeck/:id" element={ 
-              // <ProtectedRoute>
+              <ProtectedRoute>
                 <Pages.EditDeck />
-              // </ProtectedRoute>
+              </ProtectedRoute>
             } />
             <Route path="forgotPassword" element={<Pages.ForgotPassword />} />
             <Route path="resetPassword/:token" element={<Pages.ResetPassword />} />
@@ -46,9 +46,9 @@ const App = () =>
             <Route path="sets" element={<Pages.Sets />} />
             <Route path="search/:searchString" element={<Pages.CardList />} />
             <Route path="myDecks" element={
-              // <ProtectedRoute>
+              <ProtectedRoute>
                 <Pages.MyDecks />
-              // </ProtectedRoute>
+              </ProtectedRoute>
             } />
           </Routes>
         </div>
