@@ -1,24 +1,36 @@
 import getCsrfToken from "../util/getCsrfToken";
 
-export default async function makeApiRequest(uri, options = {}) {
-  let fetchOptions = {
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest',
-      'X-CSRF-Token': getCsrfToken()
-    },
-    credentials: 'same-origin'
-  };
+const defaultFetchOptions = {
+  headers: {
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+    'X-CSRF-Token': getCsrfToken()
+  },
+  credentials: 'same-origin'
+};
+
+function getFetchOptions(options) {
+  let fetchOptions;
 
   if(options?.method !== 'GET') {
     fetchOptions = {
-      ...fetchOptions,
+      ...defaultFetchOptions,
       method: options?.method,
       body: JSON.stringify(options.body),
     }
+  } else {
+    fetchOptions = { ...defaultFetchOptions }
   }
 
-  const fetchResponse = await fetch(uri, fetchOptions);
+  if (options.token) {
+    fetchOptions.headers['Authorization'] = `Bearer ${options.token}`;
+  }
+
+  return fetchOptions;
+}
+
+export default async function makeApiRequest(uri, options = {}) {
+  const fetchResponse = await fetch(uri, getFetchOptions(options));
   const responseJson = await fetchResponse.json();
 
   return responseJson;

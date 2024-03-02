@@ -10,6 +10,16 @@ class Api::DecksController < ApplicationController
   end
 
   # Must be authenticated, which means @current_user should be set prior to this
+  # Show a list of a user's decks
+  def index
+    decks = Deck.where(user: @current_user)
+
+    respond_to do |format|
+      format.json { render json: decks.map(&:minimal_json) }
+    end
+  end
+
+  # Must be authenticated, which means @current_user should be set prior to this
   # Shape of body should be:
   # {
   #   "name": "Some Deck Name",  (required)
