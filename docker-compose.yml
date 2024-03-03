@@ -5,9 +5,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: swlcgdb
-      POSTGRES_PASSWORD: ${SWLCGDB_DATABASE_PASSWORD}
-      POSTGRES_DB: swlcgdb_production
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
 
@@ -19,15 +19,15 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DATABASE_HOST: db
-      DATABASE_PORT: 5432
-      SWLCGDB_DATABASE_PASSWORD: ${SWLCGDB_DATABASE_PASSWORD}
-      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_URL: ${DB_URL}
+      DATABASE_HOST: ${DB_HOST}
+      DATABASE_PORT: ${DB_PORT}
+      DATABASE_NAME: ${DB_NAME}
+      DATABASE_USERNAME: ${DB_USERNAME}
+      DATABASE_PASSWORD: ${DB_PASSWORD}
       RAILS_ENV: production bundle exec rake assets:precompile
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
-
     depends_on:
       - db
-
 volumes:
   postgres_data:
