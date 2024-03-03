@@ -55,7 +55,7 @@ const CardList = () => {
                   >
                     {card.name}
                   </Link>
-                  <ReactTooltip
+                  {/* <ReactTooltip
                     backgroundColor="white"
                     border
                     borderColor="black"
@@ -65,7 +65,7 @@ const CardList = () => {
                     place="right"
                   >
                     <CardPanel cardData={ card } />
-                  </ReactTooltip>
+                  </ReactTooltip> */}
                 </td>
                 <td>{card.card_type}</td>
                 <td>{card.cost}</td>

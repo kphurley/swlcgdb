@@ -1,11 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import _ from "lodash";
 
 import makeApiRequest from "../api/makeApiRequest";
+import DeckCardList from "../components/DeckCardList";
 
 const EditDeck = () => {
-  const { params } = useParams();
+  const [ deckData, setDeckData ] = useState({})
+  const params = useParams();
 
   useEffect(() => {
     async function getDeckById() {
@@ -18,8 +20,17 @@ const EditDeck = () => {
 
   
   return (
-    <div>
-      Edit Deck
+    <div className="container">
+      <div className="row">
+        <h2>{ deckData.name }</h2>
+        <div className="col-md-6">
+          <DeckCardList deckData={ deckData } />
+        </div>
+        <div className="col-md-6">
+          DeckCardPicker?
+          {/* <DeckCardPicker deckData={ deckData } callbacksForUpdates /> */}
+        </div>
+      </div>
     </div>
   );
 };

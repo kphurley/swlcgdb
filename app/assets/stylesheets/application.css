@@ -1,5 +1,7 @@
 .main-page {
+  margin-top: 24px;
   padding-top: 16px;
+  background: white;
 }
 
 .bi-chevron-right.collapsed {
@@ -40,4 +42,8 @@
 
 .padding-left-16 {
   padding-left: 16px;
+}
+
+.App {
+  background: lightgrey;
 }
