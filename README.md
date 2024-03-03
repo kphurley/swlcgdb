@@ -10,7 +10,7 @@ This is a deck building app for Star Wars: The Card Game.  This project is inspi
     - Ruby 3.2
     - Rails 7
     - Postgres 14
-2. For docker
+2. For container deployment
     - Docker
     - Docker Compose
 
