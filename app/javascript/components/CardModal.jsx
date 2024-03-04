@@ -37,7 +37,6 @@ export default function CardModal({ cardId, onClose, onCardNameClick, onQuantity
             <div className="row border-top py-2">
               <span>
                 <span className="px-2">Add this objective to deck:</span>
-                { /* When one of these are pressed, we need to push this onto the payload state and save it onClose */}
                 <button type="button" className="btn btn-secondary" onClick={() => onQuantitySelection(cardData.card_block_id ,1)}>1</button>
                 <button type="button" className="btn btn-secondary" onClick={() => onQuantitySelection(cardData.card_block_id ,2)}>2</button>
               </span>
