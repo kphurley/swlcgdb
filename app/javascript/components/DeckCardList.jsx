@@ -1,6 +1,7 @@
 import React from "react";
 import _ from "lodash";
-import ReactTooltip from "react-tooltip";
+import { Tooltip } from "react-tooltip";
+import { Link } from "react-router-dom";
 
 import CardPanel from "../components/CardPanel";
 
@@ -42,23 +43,12 @@ const DeckCardList = ({ deckData }) => {
                     <td>
                       <Link
                         className="link-primary"
-                        data-tip
-                        data-for={`card-${objectiveCard.id}`}
+                        data-tooltip-id="card-tooltip"
+                        data-tooltip-content={ JSON.stringify(objectiveCard) }
                         to={`/cards/${objectiveCard.id}`}
                       >
                         {objectiveCard.name}
                       </Link>
-                      <ReactTooltip
-                        backgroundColor="white"
-                        border
-                        borderColor="black"
-                        className="card-tooltip"
-                        textColor="black"
-                        id={`card-${objectiveCard.id}`}
-                        place="right"
-                      >
-                        <CardPanel cardData={ objectiveCard } />
-                      </ReactTooltip>
                     </td>
                     <td>
                       <i
@@ -77,23 +67,12 @@ const DeckCardList = ({ deckData }) => {
                         </td>
                         <td>&nbsp;&nbsp;<Link
                           className="link-primary"
-                          data-tip
-                          data-for={`card-${card.id}`}
+                          data-tooltip-id="card-tooltip"
+                          data-tooltip-content={ JSON.stringify(card) }
                           to={`/cards/${card.id}`}
                           >
                             {card.name}
                           </Link>
-                          <ReactTooltip
-                            backgroundColor="white"
-                            border
-                            borderColor="black"
-                            className="card-tooltip"
-                            textColor="black"
-                            id={`card-${card.id}`}
-                            place="right"
-                          >
-                            <CardPanel cardData={ card } />
-                          </ReactTooltip>
                         </td>
                       </tr>
                     )
@@ -125,23 +104,12 @@ const DeckCardList = ({ deckData }) => {
                     <td>
                       <Link
                         className="link-primary"
-                        data-tip
-                        data-for={`card-${card.id}`}
+                        data-tooltip-id="card-tooltip"
+                        data-tooltip-content={ JSON.stringify(card) }
                         to={`/cards/${card.id}`}
                       >
                         {card.name}
                       </Link>
-                      <ReactTooltip
-                        backgroundColor="white"
-                        border
-                        borderColor="black"
-                        className="card-tooltip"
-                        textColor="black"
-                        id={`card-${card.id}`}
-                        place="right"
-                      >
-                        <CardPanel cardData={ card } />
-                      </ReactTooltip>
                     </td>
                   </tr>
                 </>
@@ -150,6 +118,13 @@ const DeckCardList = ({ deckData }) => {
           }
         </tbody>
       </table>
+      <Tooltip
+        className="card-tooltip"
+        id="card-tooltip"
+        place="right"
+        style={{ backgroundColor: "white", border: "solid", color: "black" }}
+        render={({ content }) => <CardPanel cardData={ JSON.parse(content) } />}
+      />
     </>
   )
 }

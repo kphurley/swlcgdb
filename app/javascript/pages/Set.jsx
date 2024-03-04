@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import ReactTooltip from "react-tooltip";
+import { Tooltip } from "react-tooltip";
 import _ from "lodash";
 
 import makeApiRequest from "../api/makeApiRequest";
@@ -58,23 +58,12 @@ const Set = () => {
                     <td>
                       <Link
                         className="link-primary"
-                        data-tip
-                        data-for={`card-${objectiveCard.id}`}
+                        data-tooltip-id={"card-tooltip"}
+                        data-tooltip-content={ JSON.stringify(objectiveCard) }
                         to={`/cards/${objectiveCard.id}`}
                       >
                         {objectiveCard.name}
                       </Link>
-                      <ReactTooltip
-                        backgroundColor="white"
-                        border
-                        borderColor="black"
-                        className="card-tooltip"
-                        textColor="black"
-                        id={`card-${objectiveCard.id}`}
-                        place="right"
-                      >
-                        <CardPanel cardData={ objectiveCard } />
-                      </ReactTooltip>
                     </td>
                     <td>{objectiveCard.card_type}</td>
                     <td>{objectiveCard.cost}</td>
@@ -97,23 +86,12 @@ const Set = () => {
                       <tr className="collapse" id={`collapse-${blockNum}`} key={`card-row-${card.id}`}>
                         <td>&nbsp;&nbsp;<Link
                           className="link-primary"
-                          data-tip
-                          data-for={`card-${card.id}`}
+                          data-tooltip-id={"card-tooltip"}
+                          data-tooltip-content={ JSON.stringify(card) }
                           to={`/cards/${card.id}`}
                           >
                             {card.name}
                           </Link>
-                          <ReactTooltip
-                            backgroundColor="white"
-                            border
-                            borderColor="black"
-                            className="card-tooltip"
-                            textColor="black"
-                            id={`card-${card.id}`}
-                            place="right"
-                          >
-                            <CardPanel cardData={ card } />
-                          </ReactTooltip>
                         </td>
                         <td>{card.card_type}</td>
                         <td>{card.cost}</td>
@@ -130,6 +108,13 @@ const Set = () => {
           }
         </tbody>
       </table>
+      <Tooltip
+        className="card-tooltip"
+        id="card-tooltip"
+        place="right"
+        style={{ backgroundColor: "white", border: "solid", color: "black" }}
+        render={({ content }) => <CardPanel cardData={ JSON.parse(content) } />}
+      />
     </div>
   );
 };
