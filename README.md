@@ -6,7 +6,7 @@ This is a deck building app for Star Wars: The Card Game.  This project is inspi
 ### Prerequisites
 
 1. For local deployment
-    - Ruby 3.2
+    - Ruby 3.2.2
     - Rails 7
     - Postgres 16
     - Node.js 20
@@ -15,16 +15,14 @@ This is a deck building app for Star Wars: The Card Game.  This project is inspi
     - Docker Compose
 
 ### For Development
-1. `git clone https://github.com/kphurley/swlcgdb.git swlcgdb`
-2. `cd swlcgdb`
-3. Start postgres
-   4. Configure config/database.yml if required
-   5. To start a docker instance of postgres run `./postgres_docker.sh`
-4. `npx install esbuild`
-4. `bin/rails db:migrate` (to update db schemes)
-5. `bin/rails db:seed` (to seed db with playing cards from OCTGN)
-6. `bin/dev` (to start the development server)
-7. Visit `localhost:3000` in your browser
+1. Clone the repository: `git clone https://github.com/kphurley/swlcgdb.git swlcgdb`
+2. Change directory: `cd swlcgdb`
+3. Start postgres configure config/database.yml if required. To start a docker instance of postgres run: `./postgres_docker.sh`
+4. Install esbuild: `npx install esbuild`
+5. Update the db schemes: `bin/rails db:migrate`
+6. Seed the db with playing cards from OCTGN: `bin/rails db:seed`
+7. Start the development server: `bin/dev`
+8. Visit `localhost:3000` in your browser
 
 ### For Production
 To use swlcgdb in production use the `docker-compose.yml`. 
