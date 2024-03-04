@@ -34,9 +34,9 @@ const App = () =>
             } />
             <Route path="decks/:id" element={<Pages.Deck />} />
             <Route path="editDeck/:id" element={ 
-              // <ProtectedRoute>
+              <ProtectedRoute>
                 <Pages.EditDeck />
-              // </ProtectedRoute>
+              </ProtectedRoute>
             } />
             <Route path="forgotPassword" element={<Pages.ForgotPassword />} />
             <Route path="resetPassword/:token" element={<Pages.ResetPassword />} />
