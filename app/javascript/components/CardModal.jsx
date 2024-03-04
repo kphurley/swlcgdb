@@ -5,7 +5,7 @@ import CardPanel from "./CardPanel";
 import makeApiRequest from "../api/makeApiRequest";
 import getCardImageUrl from "../util/getCardImageUrl";
 
-export default function CardModal({ cardId, onClose, onCardNameClick }) {
+export default function CardModal({ cardId, onClose, onCardNameClick, onQuantitySelection }) {
   const [ cardData, setCardData ] = useState({})
 
   useEffect(() => {
@@ -37,8 +37,9 @@ export default function CardModal({ cardId, onClose, onCardNameClick }) {
             <div className="row border-top py-2">
               <span>
                 <span className="px-2">Add this objective to deck:</span>
-                <button type="button" className="btn btn-secondary">1</button>
-                <button type="button" className="btn btn-secondary">2</button>
+                { /* When one of these are pressed, we need to push this onto the payload state and save it onClose */}
+                <button type="button" className="btn btn-secondary" onClick={() => onQuantitySelection(cardData.card_block_id ,1)}>1</button>
+                <button type="button" className="btn btn-secondary" onClick={() => onQuantitySelection(cardData.card_block_id ,2)}>2</button>
               </span>
             </div>
           </div>

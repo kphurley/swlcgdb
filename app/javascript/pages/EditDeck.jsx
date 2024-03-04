@@ -1,10 +1,12 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { createPortal } from 'react-dom';
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import _ from "lodash";
 import { Tooltip } from "react-tooltip";
 
+
 import makeApiRequest from "../api/makeApiRequest";
+import { AuthContext } from "../components/AuthProvider";
 import CardModal from "../components/CardModal";
 import CardPanel from "../components/CardPanel";
 import DeckCardList from "../components/DeckCardList";
@@ -17,7 +19,9 @@ const EditDeck = () => {
   const [ filterFactionButtonEnabled, setFilterFactionButtonClicked ] = useState(null)
   const [ filterTypeButtonEnabled, setFilterTypeButtonEnabled ] = useState(null)
   const [ modalState, setModalState ] = useState({ enabled: false, cardId: null} )
+  const [ deckUpdatePayload, setDeckUpdatePayload ] = useState({});
   const params = useParams();
+  const { token } = useContext(AuthContext);
 
   const handleInputChange = (e) => {
     setSearchString(e.target.value);
@@ -63,14 +67,63 @@ const EditDeck = () => {
     setModalState({ ...modalState, cardId: cardId })
   }, [modalState, setModalState]);
 
+  const handleUpdateToQuantity = useCallback((cardBlockId, quantity) => {
+    setDeckUpdatePayload({
+      ...deckUpdatePayload,
+      [cardBlockId]: quantity
+    })
+  }, [deckUpdatePayload, setDeckUpdatePayload]);
+
+  const parseUpdatePayload = (deckData) => {
+    const payload = {}
+
+    deckData.card_blocks.forEach((blk) => {
+      payload[blk.id] = blk.quantity
+    });
+
+    return payload;
+  }
+
+  // On Load - set up the deckUpdatePayload
+  // That will trigger a fetch for the entire deck
   useEffect(() => {
     async function getDeckById() {
       const deck = await makeApiRequest(`/api/decks/${params.id}`);
-      setDeckData(deck);
+      setDeckUpdatePayload(parseUpdatePayload(deck));
     };
 
     getDeckById();
   }, [])
+
+  const formatDeckUpdatePayload = (payload) => {
+    return Object.keys(payload).map((key) => {
+      return { id: key, quantity: payload[key] }
+    });
+  };
+
+  // On an update to the payload - Persist the update and update the deck's contents
+  useEffect(() => {
+    // This is very important!  If deckUpdatePayload is empty, don't blow it away!
+    if (Object.keys(deckUpdatePayload).length === 0) return;
+
+    async function putDeckById() {
+      // The deckUpdatePayload is really just a mapping of card_block_id to quantity
+      // This is a convenience for the front end
+      // The api needs this as an array of objects, e.g. [{ card_block_id: 2, quantity: 1 }, ...]
+      // TODO - Is this worth it?  It might be ok to edit the deck directly and just PUT changes to it.
+      const formattedPayload = formatDeckUpdatePayload(deckUpdatePayload);
+
+      const deck = await makeApiRequest(`/api/decks/${params.id}`, {
+        token,
+        method: 'PUT',
+        body: { card_blocks: formattedPayload }
+      });
+
+      setDeckData(deck);
+    };
+
+    putDeckById();
+  }, [deckUpdatePayload])
 
   useEffect(() => {
     async function getQueryStringAndSearch() {
@@ -111,7 +164,7 @@ const EditDeck = () => {
         <div className="col-md-6">
           <div className="d-flex m-2">
             <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("jedi")} style={getStylesFor("jedi")}><img className="faction-button-image" src="/jedi.png" /></button>
-            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("rebels")} style={getStylesFor("rebels")}><img className="faction-button-image" src="/rebels.png" /></button>
+            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("rebel")} style={getStylesFor("rebel")}><img className="faction-button-image" src="/rebels.png" /></button>
             <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("smugglers")} style={getStylesFor("smugglers")}><img className="faction-button-image" src="/smugglers.png" /></button>
             <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("neutral-light")} style={getStylesFor("neutral-light")}><i className="bi-circle" style={{ fontSize: "0.75rem" }}></i></button>
             <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("imperial")} style={getStylesFor("imperial")}><img className="faction-button-image" src="/imperial.png" /></button>
@@ -185,7 +238,12 @@ const EditDeck = () => {
         </div>
       </div>
       {modalState.enabled && createPortal(
-        <CardModal cardId={ modalState.cardId } onClose={() => handleCloseModal()} onCardNameClick={handleUpdateModal} />,
+        <CardModal
+          cardId={ modalState.cardId }
+          onClose={() => handleCloseModal()}
+          onCardNameClick={handleUpdateModal}
+          onQuantitySelection={handleUpdateToQuantity}
+        />,
         document.body
       )}
     </div>

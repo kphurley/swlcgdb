@@ -58,7 +58,7 @@ const CardBlockInfo = ({ cardBlockId, currentCardId, onCardNameClick }) => {
         className="card-tooltip"
         id="card-tooltip"
         place="right"
-        style={{ backgroundColor: "white", border: "solid", color: "black" }}
+        style={{ backgroundColor: "white", color: "black" }}
         render={({ content }) => <CardPanel cardData={ JSON.parse(content) } />}
       />
     </div>

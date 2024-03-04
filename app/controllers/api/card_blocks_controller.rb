@@ -5,7 +5,7 @@ class Api::CardBlocksController < ApplicationController
     card_block = CardBlock.find(params[:id])
 
     respond_to do |format|
-      format.json { render json: card_block.as_json }
+      format.json { render json: card_block.json_with_cards }
     end
   end
 end

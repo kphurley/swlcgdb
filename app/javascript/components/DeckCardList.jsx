@@ -36,7 +36,7 @@ const DeckCardList = ({ deckData }) => {
 
               return (
                 <>
-                  <tr>
+                  <tr key={`block-${blockNum}`}>
                     <td>
                       {getQuantityOfObjective(objectiveCard)}
                     </td>
