@@ -59,8 +59,6 @@ const CreateDeck = () => {
         body: createDeckPayload,
       });
       
-      // TODO - Navigate to edit deck page with the new deck
-      // This page doesn't exist yet
       navigate(`/editDeck/${newDeck.id}`);
     } catch (err) {
       console.error("ERROR!", err);

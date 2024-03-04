@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   namespace 'api' do
     resources :affiliations, only: [:index]
     resources :cards, only: [:show]
+    resources :card_blocks, only: [:show]
     resources :card_sets, only: [:index, :show]
     resources :decks, only: [:show, :create, :update, :index]
     resources :search, only: [:create]

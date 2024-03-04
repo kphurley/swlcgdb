@@ -14,6 +14,7 @@ class Deck < ApplicationRecord
   def as_json
     {
       id: id,
+      user_id: user_id,
       name: name,
       description: description,
       card_blocks: card_blocks_as_hashes_with_quantity,
