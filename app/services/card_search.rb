@@ -1,6 +1,7 @@
 # This service provides a way to search the DB for a card given a search string
 # Supported options:
 #  c:cost
+#  a:affiliation
 #  k:traits
 #  t:type
 #  x:text
@@ -39,6 +40,8 @@ class CardSearch
     case flag
     when 'c'
       ["cost = ?", sanitized_value]
+    when 'a'
+      ["affiliation ILIKE ?", "%#{sanitized_value}%"]
     when 'k'
       ["traits ILIKE ?", "%#{sanitized_value}%"]
     when 't'

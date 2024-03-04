@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { createPortal } from 'react-dom';
 import { Link, useParams } from "react-router-dom";
 import _ from "lodash";
 import { Tooltip } from "react-tooltip";
 
 import makeApiRequest from "../api/makeApiRequest";
+import CardModal from "../components/CardModal";
 import CardPanel from "../components/CardPanel";
 import DeckCardList from "../components/DeckCardList";
 import getIconsFromIconString from "../util/getIconsFromIconString";
@@ -12,6 +14,9 @@ const EditDeck = () => {
   const [ deckData, setDeckData ] = useState({})
   const [ cardList, setCardList ] = useState([])
   const [ searchString, setSearchString ] = useState("")
+  const [ filterFactionButtonEnabled, setFilterFactionButtonClicked ] = useState(null)
+  const [ filterTypeButtonEnabled, setFilterTypeButtonEnabled ] = useState(null)
+  const [ modalState, setModalState ] = useState({ enabled: false, cardId: null} )
   const params = useParams();
 
   const handleInputChange = (e) => {
@@ -19,12 +24,44 @@ const EditDeck = () => {
   }
 
   const handleSearchSubmit = useCallback(async () => {
+    const factionQueryString = filterFactionButtonEnabled ? `a:${filterFactionButtonEnabled}` : ""
+    const typeQueryString = filterTypeButtonEnabled ? `t:${filterTypeButtonEnabled}` : "";
+    const finalSearchString = [factionQueryString, typeQueryString, searchString].join(",");
+
     const _list = await makeApiRequest(`${window.location.origin}/api/search`, {
       method: 'POST',
-      body: { searchString },
+      body: { searchString: finalSearchString },
     });
     setCardList(_list);
-  }, [searchString])
+  }, [filterFactionButtonEnabled, filterTypeButtonEnabled, searchString])
+
+  const handleFilterFactionButtonClicked = useCallback((property) => {
+    if (filterFactionButtonEnabled === property) {
+      return setFilterFactionButtonClicked(null);
+    } else {
+      return setFilterFactionButtonClicked(property);
+    }
+  }, [filterFactionButtonEnabled, setFilterFactionButtonClicked])
+
+  const handleFilterTypeButtonClicked = useCallback((property) => {
+    if (filterTypeButtonEnabled === property) {
+      return setFilterTypeButtonEnabled(null);
+    } else {
+      return setFilterTypeButtonEnabled(property);
+    }
+  }, [filterTypeButtonEnabled, setFilterTypeButtonEnabled])
+
+  const handleOpenModal = useCallback((cardId) => {
+    setModalState({ cardId, enabled: true })
+  }, [setModalState]);
+
+  const handleCloseModal = useCallback(() => {
+    setModalState({ cardId: null, enabled: false })
+  }, [setModalState]);
+
+  const handleUpdateModal = useCallback((cardId) => {
+    setModalState({ ...modalState, cardId: cardId })
+  }, [modalState, setModalState]);
 
   useEffect(() => {
     async function getDeckById() {
@@ -35,6 +72,35 @@ const EditDeck = () => {
     getDeckById();
   }, [])
 
+  useEffect(() => {
+    async function getQueryStringAndSearch() {
+      const factionQueryString = filterFactionButtonEnabled ? `a:${filterFactionButtonEnabled}` : ""
+      const typeQueryString = filterTypeButtonEnabled ? `t:${filterTypeButtonEnabled}` : "";
+      const finalSearchString = [factionQueryString, typeQueryString, searchString].join(",");
+
+      const _list = await makeApiRequest(`${window.location.origin}/api/search`, {
+        method: 'POST',
+        body: { searchString: finalSearchString },
+      });
+  
+      setCardList(_list);
+    };
+    
+    if(filterFactionButtonEnabled === null && filterTypeButtonEnabled === null) return;
+
+    getQueryStringAndSearch();
+  }, [filterFactionButtonEnabled, filterTypeButtonEnabled, setCardList])
+
+  const getStylesFor = useCallback((property) => {
+    if (filterFactionButtonEnabled === property) {
+      return { backgroundColor: "darkgrey" }
+    } else if (filterTypeButtonEnabled === property) {
+      return { backgroundColor: "darkgrey" }
+    } else {
+      return {}
+    }
+  }, [filterFactionButtonEnabled, filterTypeButtonEnabled]);
+
   return (
     <div className="container">
       <div className="row">
@@ -43,9 +109,30 @@ const EditDeck = () => {
           <DeckCardList deckData={ deckData } />
         </div>
         <div className="col-md-6">
-          {/* TODO - ADD PRESET BUTTONS TO FILTER TYPES */}
-          <input className="form-control me-2" onChange={ handleInputChange } type="search" placeholder="Search" aria-label="Search" />
-          <button className="btn btn-outline-success" onClick={ handleSearchSubmit }>Search</button>
+          <div className="d-flex m-2">
+            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("jedi")} style={getStylesFor("jedi")}><img className="faction-button-image" src="/jedi.png" /></button>
+            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("rebels")} style={getStylesFor("rebels")}><img className="faction-button-image" src="/rebels.png" /></button>
+            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("smugglers")} style={getStylesFor("smugglers")}><img className="faction-button-image" src="/smugglers.png" /></button>
+            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("neutral-light")} style={getStylesFor("neutral-light")}><i className="bi-circle" style={{ fontSize: "0.75rem" }}></i></button>
+            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("imperial")} style={getStylesFor("imperial")}><img className="faction-button-image" src="/imperial.png" /></button>
+            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("sith")} style={getStylesFor("sith")}><img className="faction-button-image" src="/sith.png" /></button>
+            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("scum")} style={getStylesFor("scum")}><img className="faction-button-image" src="/scum.png" /></button>
+            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("neutral-dark")} style={getStylesFor("neutral-dark")}><i className="bi-circle-fill" style={{ fontSize: "0.75rem" }}></i></button>
+          </div>
+
+          <div className="d-flex m-2">
+            <button type="button" className="flex-fill" onClick={() => handleFilterTypeButtonClicked("objective")} style={getStylesFor("objective")}><i className="bi-bullseye"></i></button>{/* Objectives */}
+            <button type="button" className="flex-fill" onClick={() => handleFilterTypeButtonClicked("unit")} style={getStylesFor("unit")}><i className="bi-person-fill"></i></button> {/* Units */}
+            <button type="button" className="flex-fill" onClick={() => handleFilterTypeButtonClicked("enhancement")} style={getStylesFor("enhancement")}><i className="bi-paperclip"></i></button> {/* Enhancement */}
+            <button type="button" className="flex-fill" onClick={() => handleFilterTypeButtonClicked("event")} style={getStylesFor("event")}><i className="bi-lightning-fill"></i></button> {/* Event */}
+            <button type="button" className="flex-fill" onClick={() => handleFilterTypeButtonClicked("fate")} style={getStylesFor("fate")}><i className="bi-question-lg"></i></button> {/* Fate */}
+            <button type="button" className="flex-fill" onClick={() => handleFilterTypeButtonClicked("mission")} style={getStylesFor("mission")}><i className="bi-list-task"></i></button> {/* Mission */}
+          </div>
+
+          <div className="input-group">
+            <input className="form-control flex-fill" onChange={ handleInputChange } type="search" placeholder="Search" aria-label="Search" />
+            <button className="btn btn-outline-success" onClick={ handleSearchSubmit }>Search</button>
+          </div>
           {/* EXTRACT THIS - SHARED WITH CardList */}
           <div className="container">
             <table className="table table-sm">
@@ -67,14 +154,14 @@ const EditDeck = () => {
                     <tr key={`card-${card.id}`}>
                       <td>
                         {/* TODO - REPLACE WITH A CLICK TO A MODAL TO ADD TO DECK */}
-                        <Link
+                        <div
                           className="link-primary"
                           data-tooltip-id={"card-tooltip"}
                           data-tooltip-content={ JSON.stringify(card) }
-                          to={`/cards/${card.id}`}
+                          onClick={() => handleOpenModal(card.id)}
                         >
                           {card.name}
-                        </Link>
+                        </div>
                       </td>
                       <td>{card.card_type}</td>
                       <td>{card.cost}</td>
@@ -97,6 +184,10 @@ const EditDeck = () => {
           </div>
         </div>
       </div>
+      {modalState.enabled && createPortal(
+        <CardModal cardId={ modalState.cardId } onClose={() => handleCloseModal()} onCardNameClick={handleUpdateModal} />,
+        document.body
+      )}
     </div>
   );
 };
