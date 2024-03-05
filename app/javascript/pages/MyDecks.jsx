@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import makeApiRequest from "../api/makeApiRequest";
 import DeckListItem from "../components/DeckListItem";
-
 
 const MyDecks = () => {
   const [decks, setDecks] = useState([]);

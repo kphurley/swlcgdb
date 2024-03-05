@@ -14,6 +14,8 @@ Rails.application.routes.draw do
     resources :search, only: [:create]
     resources :users, except: [:index]  # Avoid route showing all users
 
+    get 'decks/byFaction/mostRecent', to: 'decks#most_recent_decks_by_faction'
+
     #TODO - some kind of deck action based on search params
 
     namespace 'password' do

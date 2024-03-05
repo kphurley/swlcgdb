@@ -1,6 +1,7 @@
 class Api::DecksController < ApplicationController
   skip_before_action :authenticate_request, only: [:show]
 
+  # GET api/decks/:id
   def show
     deck = Deck.find(params[:id])
 
@@ -9,6 +10,7 @@ class Api::DecksController < ApplicationController
     end
   end
 
+  # GET api/decks
   # Must be authenticated, which means @current_user should be set prior to this
   # Show a list of a user's decks
   def index
@@ -19,6 +21,7 @@ class Api::DecksController < ApplicationController
     end
   end
 
+  # POST api/decks
   # Must be authenticated, which means @current_user should be set prior to this
   # Shape of body should be:
   # {
@@ -44,6 +47,7 @@ class Api::DecksController < ApplicationController
     end
   end
 
+  # PUT api/decks/:id
   # Must be authenticated, which means @current_user should be set prior to this
   # Shape of body should be:
   # {
@@ -65,6 +69,18 @@ class Api::DecksController < ApplicationController
 
     respond_to do |format|
       format.json { render json: found_deck.as_json }
+    end
+  end
+
+  # GET api/decks/byFaction/mostRecent
+  # Get the last deck created from each faction
+  def most_recent_decks_by_faction
+    decks = Affiliation::AFFILIATION_NAMES.map do |name|
+      Deck.joins(:affiliation).where("affiliations.affiliation_name = ?", name).order(:updated_at).limit(1)
+    end
+
+    respond_to do |format|
+      format.json { render json: decks.flatten.map(&:as_json) }
     end
   end
 end
