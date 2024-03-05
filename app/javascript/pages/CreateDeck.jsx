@@ -50,17 +50,25 @@ const CreateDeck = () => {
   };
 
   const onSubmit = useCallback(async () => {
+    // Sometimes, it's possible to use the default affiliation without selecting it
+    // We have to account for that case or the save will fail
+    // The modifiedPayload always sets the default affiliation (from the core set)
+    const modifiedPayload = { ...createDeckPayload };
+    if (!modifiedPayload.affiliation_id) {
+      modifiedPayload.affiliation_id = affiliations.find((aff) => aff.affiliation_name === selectedFaction).id;
+    }
+
     try {
       const newDeck = await makeApiRequest("/api/decks", {
         method: 'POST',
-        body: createDeckPayload,
+        body: modifiedPayload,
       });
       
       navigate(`/editDeck/${newDeck.id}`);
     } catch (err) {
       console.error("ERROR!", err);
     }
-  }, [createDeckPayload])
+  }, [affiliations, createDeckPayload, selectedFaction])
 
   return (
     <form>
