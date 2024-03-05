@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import _ from "lodash";
 
 import makeApiRequest from "../api/makeApiRequest";
-import { AuthContext } from "../components/AuthProvider";
 
 const FACTIONS = [
   "Imperial Navy",
@@ -19,7 +18,6 @@ const CreateDeck = () => {
   const [ selectedFaction, setSelectedFaction ] = useState(FACTIONS[0]);
   const [ createDeckPayload, setCreateDeckPayload ] = useState({});
   const navigate = useNavigate();
-  const { token } = useContext(AuthContext);
 
   useEffect(() => {
     async function getAffiliations() {
@@ -54,7 +52,6 @@ const CreateDeck = () => {
   const onSubmit = useCallback(async () => {
     try {
       const newDeck = await makeApiRequest("/api/decks", {
-        token,
         method: 'POST',
         body: createDeckPayload,
       });

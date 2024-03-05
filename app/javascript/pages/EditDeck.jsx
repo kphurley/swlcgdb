@@ -6,7 +6,6 @@ import { Tooltip } from "react-tooltip";
 
 
 import makeApiRequest from "../api/makeApiRequest";
-import { AuthContext } from "../components/AuthProvider";
 import CardModal from "../components/CardModal";
 import CardPanel from "../components/CardPanel";
 import DeckCardList from "../components/DeckCardList";
@@ -21,7 +20,6 @@ const EditDeck = () => {
   const [ modalState, setModalState ] = useState({ enabled: false, cardId: null} )
   const [ deckUpdatePayload, setDeckUpdatePayload ] = useState({});
   const params = useParams();
-  const { token } = useContext(AuthContext);
 
   const handleInputChange = (e) => {
     setSearchString(e.target.value);
@@ -114,7 +112,6 @@ const EditDeck = () => {
       const formattedPayload = formatDeckUpdatePayload(deckUpdatePayload);
 
       const deck = await makeApiRequest(`/api/decks/${params.id}`, {
-        token,
         method: 'PUT',
         body: { card_blocks: formattedPayload }
       });

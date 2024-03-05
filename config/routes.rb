@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   root 'home#index'
 
+  get 'me', to: 'authentication#me'
   post 'login', to: 'authentication#login'
+  delete 'logout', to: 'authentication#logout'
 
   namespace 'api' do
     resources :affiliations, only: [:index]

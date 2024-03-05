@@ -5,26 +5,44 @@ import makeApiRequest from "../api/makeApiRequest";
 export const AuthContext = React.createContext(null);
 
 const AuthProvider = ({ children }) => {
-  const [token, setToken] = React.useState(null);
   const [user, setUser] = React.useState(null);
 
   const handleLogin = async (loginPayload) => {
-    const { token, user } = await makeApiRequest("/login", {
+    const { user } = await makeApiRequest("/login", {
       method: 'POST',
       body: loginPayload,
     });
 
-    setToken(token);
     setUser(user);
   };
 
-  const handleLogout = () => {
-    setToken(null);
+  const handleLogout = async () => {
+    const { error } = await makeApiRequest("/logout", {
+      method: 'DELETE'
+    });
+
+    if (error) {
+      console.log("There was an error logging out")
+    } else {
+      setUser(null);
+    }
+  };
+
+  // Only use this in situations where we're refreshing the page and have a valid cookie
+  // Otherwise it will fail
+  const assignUser = async () => {
+    const { error, user } = await makeApiRequest('/me');
+
+    if (error) {
+      handleLogout();
+    } else {
+      setUser(user);
+    }
   };
 
   const value = {
-    token,
     user,
+    assignUser,
     onLogin: handleLogin,
     onLogout: handleLogout,
   };

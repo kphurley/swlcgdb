@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 
@@ -9,13 +9,26 @@ import TopNavigation from "./components/TopNavigation";
 import * as Pages from "./pages";
 
 const ProtectedRoute = ({ children }) => {
-  const { token } = useContext(AuthContext);
+  const { assignUser, user } = useContext(AuthContext);
+  const [ userChecked, setUserChecked ] = useState(false);
 
-  if (!token) {
+  // Ensure the cookie we have is good, redirect if not
+  useEffect(() => {
+    async function ensureUser() {
+      await assignUser();
+      setUserChecked(true);
+    }
+
+    ensureUser();
+  }, []);
+
+  if (!user && userChecked) {
     return <Navigate to="/signIn" replace />;
+  } else if (!userChecked) {
+    return null;
+  } else {
+    return children;
   }
-
-  return children;
 };
 
 const App = () =>

@@ -22,9 +22,9 @@ function getFetchOptions(options) {
     fetchOptions = { ...defaultFetchOptions }
   }
 
-  if (options.token) {
-    fetchOptions.headers['Authorization'] = `Bearer ${options.token}`;
-  }
+  // if (options.token) {
+  //   fetchOptions.headers['Authorization'] = `Bearer ${options.token}`;
+  // }
 
   return fetchOptions;
 }
