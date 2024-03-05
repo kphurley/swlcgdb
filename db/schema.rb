@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_01_150403) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_29_014914) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "affiliations", force: :cascade do |t|
+    t.string "name"
+    t.integer "resources"
+    t.string "text"
+    t.string "side"
+    t.string "affiliation_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "card_blocks", force: :cascade do |t|
     t.bigint "card_set_id"
@@ -71,6 +81,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_01_150403) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "affiliation_id"
     t.index ["user_id"], name: "index_decks_on_user_id"
   end
 
@@ -85,4 +96,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_01_150403) do
 
   add_foreign_key "card_blocks", "card_sets"
   add_foreign_key "cards", "card_blocks"
+  add_foreign_key "decks", "affiliations"
 end

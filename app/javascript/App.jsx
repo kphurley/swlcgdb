@@ -6,7 +6,7 @@ import AuthProvider, { AuthContext } from "./components/AuthProvider";
 import Footer from "./components/Footer";
 import TopNavigation from "./components/TopNavigation";
 
-import { Card, CardList, Deck, ForgotPassword, Home, Login, MyDecks, RegisterNewUser, ResetPassword, Set, Sets } from "./pages";
+import * as Pages from "./pages";
 
 const ProtectedRoute = ({ children }) => {
   const { token } = useContext(AuthContext);
@@ -25,19 +25,29 @@ const App = () =>
         <TopNavigation />
         <div className="container main-page">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="cards/:id" element={<Card />} />
-            <Route path="decks/:id" element={<Deck />} />
-            <Route path="forgotPassword" element={<ForgotPassword />} />
-            <Route path="resetPassword/:token" element={<ResetPassword />} />
-            <Route path="signIn" element={<Login />} />
-            <Route path="register" element={<RegisterNewUser />} />
-            <Route path="sets/:id" element={<Set />} />
-            <Route path="sets" element={<Sets />} />
-            <Route path="search/:searchString" element={<CardList />} />
+            <Route path="/" element={<Pages.Home />} />
+            <Route path="cards/:id" element={<Pages.Card />} />
+            <Route path="createDeck" element={ 
+              <ProtectedRoute>
+                <Pages.CreateDeck />
+              </ProtectedRoute>
+            } />
+            <Route path="decks/:id" element={<Pages.Deck />} />
+            <Route path="editDeck/:id" element={ 
+              <ProtectedRoute>
+                <Pages.EditDeck />
+              </ProtectedRoute>
+            } />
+            <Route path="forgotPassword" element={<Pages.ForgotPassword />} />
+            <Route path="resetPassword/:token" element={<Pages.ResetPassword />} />
+            <Route path="signIn" element={<Pages.Login />} />
+            <Route path="register" element={<Pages.RegisterNewUser />} />
+            <Route path="sets/:id" element={<Pages.Set />} />
+            <Route path="sets" element={<Pages.Sets />} />
+            <Route path="search/:searchString" element={<Pages.CardList />} />
             <Route path="myDecks" element={
               <ProtectedRoute>
-                <MyDecks />
+                <Pages.MyDecks />
               </ProtectedRoute>
             } />
           </Routes>

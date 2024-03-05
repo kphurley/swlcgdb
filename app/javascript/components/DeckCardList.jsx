@@ -1,47 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Tooltip } from "react-tooltip";
+import React from "react";
 import _ from "lodash";
-
-import makeApiRequest from "../api/makeApiRequest";
+import { Tooltip } from "react-tooltip";
+import { Link } from "react-router-dom";
 
 import CardPanel from "../components/CardPanel";
 
-import getIconsFromIconString from "../util/getIconsFromIconString";
+const DeckCardList = ({ deckData }) => {
+  const deckCards = deckData?.cards || []
+  const cardsByBlock = _.groupBy(deckCards, 'block')
 
-// List all of the cards in a set.
-const Set = () => {
-  const [ setData, setSetData ] = useState({})
-  const params = useParams();
+  const getQuantityOfObjective = (objectiveCard) => {
+    const foundBlock = deckData?.card_blocks.find((blk) => blk.block == objectiveCard.block)
 
-  useEffect(() => {
-    async function getCardSetById() {
-      const _set = await makeApiRequest(`/api/card_sets/${params.id}`);
-      setSetData(_set);
-    };
+    return foundBlock ? foundBlock.quantity : 0;
+  };
 
-    getCardSetById();
-  }, [])
-
-  // TODO - Do we need this?
-  const setCardBlocks = setData.card_blocks || []
-  setCardBlocks.sort((a, b) => a.block - b.block)
-
-  const setCards = setData.cards || []
-  const cardsByBlock = _.groupBy(setCards, 'block')
 
   return (
-    <div className="container">
+    <>
+      <h4>Objectives</h4>
       <table className="table table-sm">
         <thead>
           <tr>
+            <th>Quantity</th>
             <th>Name</th>
-            <th>Type</th>
-            <th>C.</th>
-            <th>Icons</th>
-            <th>F.</th>
-            <th>D.</th>
-            <th>R.</th>
             <th>{"  "}</th>
           </tr>
         </thead>
@@ -54,23 +36,20 @@ const Set = () => {
 
               return (
                 <>
-                  <tr>
+                  <tr key={`block-${blockNum}`}>
+                    <td>
+                      {getQuantityOfObjective(objectiveCard)}
+                    </td>
                     <td>
                       <Link
                         className="link-primary"
-                        data-tooltip-id={"card-tooltip"}
+                        data-tooltip-id="card-tooltip"
                         data-tooltip-content={ JSON.stringify(objectiveCard) }
                         to={`/cards/${objectiveCard.id}`}
                       >
                         {objectiveCard.name}
                       </Link>
                     </td>
-                    <td>{objectiveCard.card_type}</td>
-                    <td>{objectiveCard.cost}</td>
-                    <td>{getIconsFromIconString(objectiveCard.combat_icons)}</td>
-                    <td>{objectiveCard.force}</td>
-                    <td>{objectiveCard.damage_capacity}</td>
-                    <td>{objectiveCard.resources}</td>
                     <td>
                       <i
                         className="bi bi-chevron-right collapsed"
@@ -84,24 +63,55 @@ const Set = () => {
                   {
                     nonObjectiveCards.map((card) =>
                       <tr className="collapse" id={`collapse-${blockNum}`} key={`card-row-${card.id}`}>
+                        <td>
+                        </td>
                         <td>&nbsp;&nbsp;<Link
                           className="link-primary"
-                          data-tooltip-id={"card-tooltip"}
+                          data-tooltip-id="card-tooltip"
                           data-tooltip-content={ JSON.stringify(card) }
                           to={`/cards/${card.id}`}
                           >
                             {card.name}
                           </Link>
                         </td>
-                        <td>{card.card_type}</td>
-                        <td>{card.cost}</td>
-                        <td>{getIconsFromIconString(card.combat_icons)}</td>
-                        <td>{card.force}</td>
-                        <td>{card.damage_capacity}</td>
-                        <td>{card.resources}</td>
                       </tr>
                     )
                   }
+                </>
+              )
+            })
+          }
+        </tbody>
+      </table>
+
+      <h4>Cards</h4>
+      <table className="table table-sm">
+        <thead>
+          <tr>
+            <th>Quantity</th>
+            <th>Name</th>
+            <th>{"  "}</th>
+          </tr>
+        </thead>
+        <tbody>
+          { _.map(deckCards, (card) => {
+              return (
+                <>
+                  <tr>
+                    <td>
+                      {card.quantity}
+                    </td>
+                    <td>
+                      <Link
+                        className="link-primary"
+                        data-tooltip-id="card-tooltip"
+                        data-tooltip-content={ JSON.stringify(card) }
+                        to={`/cards/${card.id}`}
+                      >
+                        {card.name}
+                      </Link>
+                    </td>
+                  </tr>
                 </>
               )
             })
@@ -115,8 +125,9 @@ const Set = () => {
         style={{ backgroundColor: "white", border: "solid", color: "black" }}
         render={({ content }) => <CardPanel cardData={ JSON.parse(content) } />}
       />
-    </div>
-  );
-};
+    </>
+  )
+}
+  
 
-export default Set;
+export default DeckCardList;

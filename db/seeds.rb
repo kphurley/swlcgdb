@@ -51,6 +51,17 @@ files_to_process.each do |file|
     Card.create(cards_to_create) 
   end
 
+  # Handle affiliation cards, which don't belong to a set, and were left out above
+  affiliation_cards = raw_card_attrs
+                        .select { |c| c["card_type"] == "Affiliation" }
+                        .map { |c| c.slice("affiliation", "resources", "name", "side", "text") }
+                        .map do |c|
+                          c["affiliation_name"] = c.delete("affiliation")
+                          c
+                        end
+
+  Affiliation.create(affiliation_cards) if affiliation_cards.any?
+
   # This labels the custom sets clearly
   ffg_sets = CardBlock.all.map(&:card_set).uniq
   custom_sets = CardSet.all - ffg_sets

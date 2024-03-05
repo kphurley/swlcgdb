@@ -1,6 +1,8 @@
 import Card from "./Card"
 import CardList from "./CardList"
+import CreateDeck from "./CreateDeck"
 import Deck from "./Deck"
+import EditDeck from "./EditDeck"
 import ForgotPassword from "./ForgotPassword"
 import Home from "./Home"
 import Login from "./Login"
@@ -13,7 +15,9 @@ import Sets from "./Sets"
 export {
   Card,
   CardList,
+  CreateDeck,
   Deck,
+  EditDeck,
   ForgotPassword,
   Home,
   Login,

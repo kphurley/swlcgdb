@@ -2,7 +2,7 @@ import _ from "lodash";
 
 export default function getCardImageUrl(cardData) {
   // Temporary, until we can stand up a better CDN for these
-  const BASE_IMAGE_URL = "https://web.archive.org/web/20211216104713im_/http://www.cardgamedb.com/forums/uploads/sw";
+  const BASE_IMAGE_URL = "http://www.cardgamedb.com/forums/uploads/sw";
 
   /*
     Starting with the set “darkness and light”, the images are named by "set number"

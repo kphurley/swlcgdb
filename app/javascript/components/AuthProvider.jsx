@@ -6,14 +6,16 @@ export const AuthContext = React.createContext(null);
 
 const AuthProvider = ({ children }) => {
   const [token, setToken] = React.useState(null);
+  const [user, setUser] = React.useState(null);
 
   const handleLogin = async (loginPayload) => {
-    const { token } = await makeApiRequest("/login", {
+    const { token, user } = await makeApiRequest("/login", {
       method: 'POST',
       body: loginPayload,
     });
 
     setToken(token);
+    setUser(user);
   };
 
   const handleLogout = () => {
@@ -22,6 +24,7 @@ const AuthProvider = ({ children }) => {
 
   const value = {
     token,
+    user,
     onLogin: handleLogin,
     onLogout: handleLogout,
   };
