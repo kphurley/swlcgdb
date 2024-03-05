@@ -2,17 +2,15 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import makeApiRequest from "../api/makeApiRequest";
-import { AuthContext } from "../components/AuthProvider";
 import DeckListItem from "../components/DeckListItem";
 
 
 const MyDecks = () => {
   const [decks, setDecks] = useState([]);
-  const { token } = useContext(AuthContext);
 
   useEffect(() => {
     async function getDecks() {
-      const decks = await makeApiRequest('/api/decks', { token });
+      const decks = await makeApiRequest('/api/decks');
       setDecks(decks);
     };
 
@@ -26,7 +24,7 @@ const MyDecks = () => {
         <div className="row">
           <div className="col-md-8 order-2">
             { 
-              decks.map((deck) => <DeckListItem deck={deck} />)
+              decks?.map((deck) => <DeckListItem deck={deck} />)
             }
           </div>
           <div className="col-md-4 order-md-last order-first">

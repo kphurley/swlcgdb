@@ -5,7 +5,7 @@ import { AuthContext } from "./AuthProvider";
 
 const TopNavigation = () => {
   const [searchString, setSearchString] = useState("")
-  const { token, onLogout } = useContext(AuthContext);
+  const { user, onLogout } = useContext(AuthContext);
 
   const handleInputChange = (e) => {
     setSearchString(e.target.value);
@@ -44,7 +44,7 @@ const TopNavigation = () => {
             </button>
             <ul className="dropdown-menu">
               {
-                token ?
+                user ?
                 <>
                   <li><a className="dropdown-item" href="#">Profile (Not implemented yet)</a></li>
                   <li><a className="dropdown-item" onClick={onLogout}>Logout</a></li>

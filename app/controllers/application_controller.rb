@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::Base
   include JsonWebToken
+  include ::ActionController::Cookies
 
   around_action :rescue_errors
   before_action :authenticate_request
@@ -9,14 +10,15 @@ class ApplicationController < ActionController::Base
   private
 
   def authenticate_request
-    header = request.headers["Authorization"]
-    header = header.split(" ").last if header
-    decoded = jwt_decode(header)
+    jwt = cookies.signed[:jwt]
+    decoded = jwt_decode(jwt)
     @current_user = User.find(decoded[:user_id])
   end
 
   def rescue_errors
     yield
+  rescue JWT::DecodeError => exception
+    render json: { error: 'Not authorized' }, status: 401
   rescue ActiveRecord::RecordNotFound => exception
     render json: { error: 'Not found' }, status: 404
   rescue StandardError => exception

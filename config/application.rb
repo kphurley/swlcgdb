@@ -33,5 +33,7 @@ module Swlcgdb
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    config.middleware.use ActionDispatch::Cookies
   end
 end
