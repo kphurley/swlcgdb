@@ -1,11 +1,12 @@
 import React, { useContext, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { AuthContext } from "./AuthProvider";
 
 const TopNavigation = () => {
   const [searchString, setSearchString] = useState("")
   const { user, onLogout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setSearchString(e.target.value);
@@ -14,7 +15,7 @@ const TopNavigation = () => {
   const handleLogout = () => {
     onLogout();
   
-    return <Navigate to="/signIn" replace />;
+    return navigate("/signIn");
   };
  
   return (
