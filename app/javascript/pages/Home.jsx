@@ -27,7 +27,7 @@ const Home = () => {
         <h1 className="display-1 fw-bold home-page-title">SWLCG DB</h1>
         <h2>Deckbuilder for Star Wars: The Card Game</h2>
       </div>
-      <div className="container">
+      <div className="container pb-5">
         <div className="row">
           <div className="col-lg-6">
             { recentJediDeck && <DeckListItem includeAuthor deck={recentJediDeck} /> }
