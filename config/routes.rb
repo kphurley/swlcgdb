@@ -6,6 +6,9 @@ Rails.application.routes.draw do
   delete 'logout', to: 'authentication#logout'
 
   namespace 'api' do
+    get 'decks/mine', to: 'decks#my_decks'
+    get 'decks/byFaction/mostRecent', to: 'decks#most_recent_decks_by_faction'
+
     resources :affiliations, only: [:index]
     resources :cards, only: [:show]
     resources :card_blocks, only: [:show]
@@ -13,8 +16,6 @@ Rails.application.routes.draw do
     resources :decks, only: [:show, :create, :update, :index]
     resources :search, only: [:create]
     resources :users, except: [:index]  # Avoid route showing all users
-
-    get 'decks/byFaction/mostRecent', to: 'decks#most_recent_decks_by_faction'
 
     #TODO - some kind of deck action based on search params
 

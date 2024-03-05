@@ -24,7 +24,7 @@ const TopNavigation = () => {
               <Link className="nav-link" to="myDecks">My Decks</Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link">Decklists</a>
+              <Link className="nav-link" to="decklists">Decklists</Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="sets">Sets</Link>

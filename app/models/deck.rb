@@ -11,7 +11,7 @@ class Deck < ApplicationRecord
   # which isn't really useful for displays
 
   # Use the helpers below to assist in performing CRUD operations on decks
-  def as_json
+  def detailed_json
     {
       id: id,
       user: user.safe_json,
@@ -31,6 +31,7 @@ class Deck < ApplicationRecord
       name: name,
       description: description,
       affiliation: affiliation.as_json&.except("created_at", "updated_at"),
+      user: user.safe_json,
       created_at: created_at,
       updated_at: updated_at,
     }
