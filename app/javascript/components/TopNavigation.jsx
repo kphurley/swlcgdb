@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 import { AuthContext } from "./AuthProvider";
 
@@ -10,6 +10,12 @@ const TopNavigation = () => {
   const handleInputChange = (e) => {
     setSearchString(e.target.value);
   }
+
+  const handleLogout = () => {
+    onLogout();
+  
+    return <Navigate to="/signIn" replace />;
+  };
  
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -47,7 +53,7 @@ const TopNavigation = () => {
                 user ?
                 <>
                   <li className="dropdown-item disabled">{`Logged in as ${user.username}`}</li>
-                  <li><a className="dropdown-item" onClick={onLogout}>Logout</a></li>
+                  <li><a className="dropdown-item" onClick={handleLogout}>Logout</a></li>
                 </>
                 :
                 <>

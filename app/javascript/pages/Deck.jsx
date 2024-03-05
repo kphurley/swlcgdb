@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import _ from "lodash";
 
@@ -22,7 +22,7 @@ const Deck = () => {
     getDeckById();
   }, [])
 
-  const isUserDeck = () => deckData?.user_id === user?.id;
+  const isUserDeck = (deckData, user) => deckData?.user?.id === user?.id;
 
   return (
     <div className="container">
@@ -33,7 +33,7 @@ const Deck = () => {
         </div>
         <div className="col-md-6">
           <div className="container">
-            { isUserDeck() && <Link to={`/editDeck/${deckData.id}`}><button type="button" className="btn btn-primary mx-1">Edit</button></Link> }
+            { isUserDeck(deckData, user) && <Link to={`/editDeck/${deckData.id}`}><button type="button" className="btn btn-primary mx-1">Edit</button></Link> }
             {/* TODO <Link><button type="button" className="btn btn-secondary mx-1">Clone</button></Link> */}
           </div>
           <div className="row">
