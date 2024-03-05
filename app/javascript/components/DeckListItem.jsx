@@ -10,7 +10,7 @@ const AFFILIATION_NAME_TO_IMAGE_SRC = {
   'Scum and Villainy': 'scum',
 }
 
-const DeckListItem = ({ deck }) => {
+const DeckListItem = ({ deck, includeAuthor }) => {
   const mapAffiliationNameToImageSrc = (deck) => `/${AFFILIATION_NAME_TO_IMAGE_SRC[deck.affiliation.affiliation_name]}.png`;
 
   return (
@@ -20,6 +20,7 @@ const DeckListItem = ({ deck }) => {
       </div>
       <div className="col-sm-10">
         <Link to={`/decks/${deck.id}`}><div>{ deck.name }</div></Link>
+        { includeAuthor && <div>{ `by ${deck.user.username}` }</div> }
         <div>{ deck.affiliation?.name }</div>
       </div>
     </div>

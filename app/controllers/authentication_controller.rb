@@ -4,7 +4,7 @@ class AuthenticationController < ApplicationController
   skip_before_action :authenticate_request, only: [:login, :logout]
 
   def me
-    rendered_user = @current_user.attributes.slice("id", "username", "email")
+    rendered_user = @current_user.safe_json
 
     render json: { user: rendered_user }, status: :ok
   end
@@ -15,7 +15,7 @@ class AuthenticationController < ApplicationController
     if @user&.authenticate(login_params[:password])
       token = jwt_encode(user_id: @user.id)
       cookies.signed[:jwt] = { value: token, httponly: true, expires: 1.hour.from_now }
-      rendered_user = @user.attributes.slice("id", "username", "email")
+      rendered_user = @user.safe_json
 
       render json: { user: rendered_user }, status: :ok
     else
