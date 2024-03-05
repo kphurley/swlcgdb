@@ -46,6 +46,7 @@ const App = () =>
               </ProtectedRoute>
             } />
             <Route path="decks/:id" element={<Pages.Deck />} />
+            <Route path="decklists" element={<Pages.Decklists />} />
             <Route path="editDeck/:id" element={ 
               <ProtectedRoute>
                 <Pages.EditDeck />

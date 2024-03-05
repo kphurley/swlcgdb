@@ -1,19 +1,32 @@
+require 'pagy/extras/metadata'
+
 class Api::DecksController < ApplicationController
-  skip_before_action :authenticate_request, only: [:show]
+  include Pagy::Backend
+
+  skip_before_action :authenticate_request, only: [:show, :index, :most_recent_decks_by_faction]
 
   # GET api/decks/:id
   def show
     deck = Deck.find(params[:id])
 
     respond_to do |format|
-      format.json { render json: deck.as_json }
+      format.json { render json: deck.detailed_json }
     end
   end
 
   # GET api/decks
+  # List ALL decks
+  # TODO - Should be paginated
+  def index
+    @pagy, @records = pagy(Deck.all.order(updated_at: :desc), items: 20)
+
+    render json: { data: @records.map(&:minimal_json), pagy: pagy_metadata(@pagy) }
+  end
+
+  # GET api/decks/mine
   # Must be authenticated, which means @current_user should be set prior to this
   # Show a list of a user's decks
-  def index
+  def my_decks
     decks = Deck.where(user: @current_user)
 
     respond_to do |format|
@@ -43,7 +56,7 @@ class Api::DecksController < ApplicationController
     )
 
     respond_to do |format|
-      format.json { render json: deck.as_json }
+      format.json { render json: deck.detailed_json }
     end
   end
 
@@ -68,7 +81,7 @@ class Api::DecksController < ApplicationController
     found_deck.update_from_json!(permitted_params)
 
     respond_to do |format|
-      format.json { render json: found_deck.as_json }
+      format.json { render json: found_deck.detailed_json }
     end
   end
 
@@ -80,7 +93,7 @@ class Api::DecksController < ApplicationController
     end
 
     respond_to do |format|
-      format.json { render json: decks.flatten.map(&:as_json) }
+      format.json { render json: decks.flatten.map(&:minimal_json) }
     end
   end
 end

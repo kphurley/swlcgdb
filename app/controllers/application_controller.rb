@@ -22,7 +22,8 @@ class ApplicationController < ActionController::Base
   rescue ActiveRecord::RecordNotFound => exception
     render json: { error: 'Not found' }, status: 404
   rescue StandardError => exception
-    puts exception.inspect
+    puts exception.message
+    puts exception.backtrace
     render json: { error: 'Internal Server Error' }, status: 500
   end
 end

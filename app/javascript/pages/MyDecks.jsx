@@ -9,7 +9,7 @@ const MyDecks = () => {
 
   useEffect(() => {
     async function getDecks() {
-      const decks = await makeApiRequest('/api/decks');
+      const decks = await makeApiRequest('/api/decks/mine');
       setDecks(decks);
     };
 
@@ -23,7 +23,7 @@ const MyDecks = () => {
         <div className="row">
           <div className="col-md-8 order-2">
             { 
-              decks?.map((deck) => <DeckListItem deck={deck} />)
+              decks?.map((deck) => <DeckListItem key={`my-decks-${deck.id}`} deck={deck} />)
             }
           </div>
           <div className="col-md-4 order-md-last order-first">
