@@ -16,7 +16,7 @@ class Api::DecksController < ApplicationController
 
   # GET api/decks
   # List ALL decks
-  # TODO - Should be paginated
+  # Paginated in pages of 20 items each, uses page=x query parameter to get a specific page
   def index
     @pagy, @records = pagy(Deck.all.order(updated_at: :desc), items: 20)
 
