@@ -24,6 +24,11 @@ default: &default
 development:
   <<: *default
   database: swlcgdb_development
+  username: swlcgdb
+  password: swlcgdb_development
+  host: localhost
+  port: 5432
+
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -81,6 +86,8 @@ test:
 #
 production:
   <<: *default
-  database: swlcgdb_production
-  username: swlcgdb
-  password: <%= ENV["SWLCGDB_DATABASE_PASSWORD"] %>
+  database: <%= ENV["DATABASE_NAME"] %>
+  username: <%= ENV["DATABASE_USERNAME"] %>
+  password: <%= ENV["DATABASE_PASSWORD"] %>
+  host: <%= ENV["DATABASE_HOST"] %>
+  port: <%= ENV["DATABASE_PORT"] %>
