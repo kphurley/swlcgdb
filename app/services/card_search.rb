@@ -31,7 +31,7 @@ class CardSearch
   private
 
   def self.parse_input_to_options(search_input)
-    search_input.split(",").map { |_i| _i.strip.split(":") }
+    search_input.split(",").reject(&:empty?).map { |_i| _i.strip.split(":") }
   end
 
   def self.map_options_to_conditions(flag, value = nil)
@@ -42,8 +42,14 @@ class CardSearch
       ["cost = ?", sanitized_value]
     when 'a'
       ["affiliation ILIKE ?", "%#{sanitized_value}%"]
+    when 'f'
+      ["cost = ?", sanitized_value]
+    when 'h'
+      ["cost = ?", sanitized_value]
     when 'k'
       ["traits ILIKE ?", "%#{sanitized_value}%"]
+    when 's'
+      ["side ILIKE ?", "%#{sanitized_value}%"]
     when 't'
       ["card_type ILIKE ?", "%#{sanitized_value}%"]
     when 'x'

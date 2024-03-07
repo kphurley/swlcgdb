@@ -19,23 +19,34 @@ const EditDeck = () => {
   const [ filterTypeButtonEnabled, setFilterTypeButtonEnabled ] = useState(null)
   const [ modalState, setModalState ] = useState({ enabled: false, cardId: null} )
   const [ deckUpdatePayload, setDeckUpdatePayload ] = useState({});
+  const [ error, setError ] = useState(null);
   const params = useParams();
 
+  const isLightSideDeck = deckData?.affiliation?.side == "Light";
+  const isDarkSideDeck = deckData?.affiliation?.side == "Dark";
+
   const handleInputChange = (e) => {
-    setSearchString(e.target.value);
+    setSearchString(e.target.value || "");
   }
 
   const handleSearchSubmit = useCallback(async () => {
     const factionQueryString = filterFactionButtonEnabled ? `a:${filterFactionButtonEnabled}` : ""
     const typeQueryString = filterTypeButtonEnabled ? `t:${filterTypeButtonEnabled}` : "";
-    const finalSearchString = [factionQueryString, typeQueryString, searchString].join(",");
+    const sideString = `s:${deckData.affiliation.side}`;
+    const finalSearchString = [sideString, factionQueryString, typeQueryString, searchString].join(",");
 
     const _list = await makeApiRequest(`${window.location.origin}/api/search`, {
       method: 'POST',
       body: { searchString: finalSearchString },
     });
-    setCardList(_list);
-  }, [filterFactionButtonEnabled, filterTypeButtonEnabled, searchString])
+
+    if (_list.error) {
+      setError(_list.error);
+    } else {
+      setCardList(_list);
+      setError(null);
+    }
+  }, [deckData, filterFactionButtonEnabled, filterTypeButtonEnabled, searchString])
 
   const handleFilterFactionButtonClicked = useCallback((property) => {
     if (filterFactionButtonEnabled === property) {
@@ -87,7 +98,13 @@ const EditDeck = () => {
   useEffect(() => {
     async function getDeckById() {
       const deck = await makeApiRequest(`/api/decks/${params.id}`);
-      setDeckUpdatePayload(parseUpdatePayload(deck));
+
+      if (deck.error) {
+        setError(deck.error);
+      } else {
+        setDeckUpdatePayload(parseUpdatePayload(deck));
+        setError(null);
+      }
     };
 
     getDeckById();
@@ -116,7 +133,12 @@ const EditDeck = () => {
         body: { card_blocks: formattedPayload }
       });
 
-      setDeckData(deck);
+      if (deck.error) {
+        setError(deck.error);
+      } else {
+        setDeckData(deck);
+        setError(null);
+      }
     };
 
     putDeckById();
@@ -126,14 +148,20 @@ const EditDeck = () => {
     async function getQueryStringAndSearch() {
       const factionQueryString = filterFactionButtonEnabled ? `a:${filterFactionButtonEnabled}` : ""
       const typeQueryString = filterTypeButtonEnabled ? `t:${filterTypeButtonEnabled}` : "";
-      const finalSearchString = [factionQueryString, typeQueryString, searchString].join(",");
+      const sideString = `s:${deckData.affiliation.side}`;
+      const finalSearchString = [sideString, factionQueryString, typeQueryString, searchString].join(",");
 
       const _list = await makeApiRequest(`${window.location.origin}/api/search`, {
         method: 'POST',
         body: { searchString: finalSearchString },
       });
   
-      setCardList(_list);
+      if (_list.error) {
+        setError(_list.error);
+      } else {
+        setCardList(_list);
+        setError(null);
+      }
     };
     
     if(filterFactionButtonEnabled === null && filterTypeButtonEnabled === null) return;
@@ -155,19 +183,38 @@ const EditDeck = () => {
     <div className="container">
       <div className="row">
         <h2>{ deckData.name }</h2>
+        { error &&
+          <div className="alert alert-danger alert-dismissible" role="alert">
+            <div>{ error }</div>
+            <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        } 
         <div className="col-md-6">
           <DeckCardList deckData={ deckData } />
         </div>
         <div className="col-md-6">
           <div className="d-flex m-2">
-            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("jedi")} style={getStylesFor("jedi")}><img className="faction-button-image" src="/jedi.png" /></button>
-            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("rebel")} style={getStylesFor("rebel")}><img className="faction-button-image" src="/rebels.png" /></button>
-            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("smugglers")} style={getStylesFor("smugglers")}><img className="faction-button-image" src="/smugglers.png" /></button>
-            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("neutral-light")} style={getStylesFor("neutral-light")}><i className="bi-circle" style={{ fontSize: "0.75rem" }}></i></button>
-            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("imperial")} style={getStylesFor("imperial")}><img className="faction-button-image" src="/imperial.png" /></button>
-            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("sith")} style={getStylesFor("sith")}><img className="faction-button-image" src="/sith.png" /></button>
-            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("scum")} style={getStylesFor("scum")}><img className="faction-button-image" src="/scum.png" /></button>
-            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("neutral-dark")} style={getStylesFor("neutral-dark")}><i className="bi-circle-fill" style={{ fontSize: "0.75rem" }}></i></button>
+            {
+              isLightSideDeck && (
+                <>
+                  <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("jedi")} style={getStylesFor("jedi")}><img className="faction-button-image" src="/jedi.png" /></button>
+                  <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("rebel")} style={getStylesFor("rebel")}><img className="faction-button-image" src="/rebels.png" /></button>
+                  <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("smugglers")} style={getStylesFor("smugglers")}><img className="faction-button-image" src="/smugglers.png" /></button>
+                </>
+              )
+            }
+            {
+              isDarkSideDeck && (
+                <>
+                  <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("imperial")} style={getStylesFor("imperial")}><img className="faction-button-image" src="/imperial.png" /></button>
+                  <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("sith")} style={getStylesFor("sith")}><img className="faction-button-image" src="/sith.png" /></button>
+                  <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("scum")} style={getStylesFor("scum")}><img className="faction-button-image" src="/scum.png" /></button>
+                </>
+              )
+            }
+
+            <button type="button" className="flex-fill" onClick={() => handleFilterFactionButtonClicked("neutral")} style={getStylesFor("neutral")}><i className="bi-circle" style={{ fontSize: "0.75rem" }}></i></button>
+            
           </div>
 
           <div className="d-flex m-2">
@@ -193,7 +240,7 @@ const EditDeck = () => {
                   <th>C.</th>
                   <th>Icons</th>
                   <th>F.</th>
-                  <th>D.</th>
+                  <th>HP</th>
                   <th>R.</th>
                   <th>{"  "}</th>
                 </tr>
