@@ -23,10 +23,10 @@ export default function CardModal({ cardId, onClose, onCardNameClick, onQuantity
         Object.keys(cardData).length > 0 && 
           <div className="container">
             <div className="row py-2">
-              <div className="col-sm-4">
+              <div className="col-md-6">
                 <CardPanel includeFlavorText cardData={cardData} />
               </div>
-              <div className="col-sm-4">
+              <div className="col-md-6">
                 { cardData.set && <img src={ getCardImageUrl(cardData) }></img> }
               </div>
             </div>
@@ -35,11 +35,11 @@ export default function CardModal({ cardId, onClose, onCardNameClick, onQuantity
               <CardBlockInfo cardBlockId={cardData?.card_block_id} currentCardId={parseInt(cardId)} onCardNameClick={(cardId) => onCardNameClick(cardId)} />
             </div>
             <div className="row border-top py-2">
-              <span>
-                <span className="px-2">Add this objective to deck:</span>
-                <button type="button" className="btn btn-secondary" onClick={() => onQuantitySelection(cardData.card_block_id ,1)}>1</button>
-                <button type="button" className="btn btn-secondary" onClick={() => onQuantitySelection(cardData.card_block_id ,2)}>2</button>
-              </span>
+              <div className="d-flex justify-content-center">
+                <button type="button" className="btn btn-secondary" onClick={() => onQuantitySelection(cardData.card_block_id, 0)}>0</button>
+                <button type="button" className="btn btn-secondary" onClick={() => onQuantitySelection(cardData.card_block_id, 1)}>1</button>
+                <button type="button" className="btn btn-secondary" onClick={() => onQuantitySelection(cardData.card_block_id, 2)}>2</button>
+              </div>
             </div>
           </div>
       }
