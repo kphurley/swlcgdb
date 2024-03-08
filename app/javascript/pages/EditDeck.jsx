@@ -93,8 +93,7 @@ const EditDeck = () => {
     return payload;
   }
 
-  // On Load - set up the deckUpdatePayload
-  // That will trigger a fetch for the entire deck
+  // On Load - set up the deckUpdatePayload and deck contents
   useEffect(() => {
     async function getDeckById() {
       const deck = await makeApiRequest(`/api/decks/${params.id}`);
@@ -102,6 +101,7 @@ const EditDeck = () => {
       if (deck.error) {
         setError(deck.error);
       } else {
+        setDeckData(deck);
         setDeckUpdatePayload(parseUpdatePayload(deck));
         setError(null);
       }

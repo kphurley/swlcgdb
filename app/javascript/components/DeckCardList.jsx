@@ -4,6 +4,7 @@ import { Tooltip } from "react-tooltip";
 import { Link } from "react-router-dom";
 
 import CardPanel from "../components/CardPanel";
+import affiliationCardNameToImageSrc from "../util/affiliationCardNameToImageSrc";
 
 const DeckCardListCardRow = ({ card }) =>
   <div className="row">
@@ -31,15 +32,6 @@ const DeckCardList = ({ deckData }) => {
   const fateCards = deckCards.filter((c) => c.card_type === "Fate");
   const missionCards = deckCards.filter((c) => c.card_type === "Mission");
 
-  const NAMES_TO_SRC = {
-    Jedi: "https://www.cardgamedb.com/forums/uploads/sw/ffg_jedi-core.png",
-    'Rebel Alliance': "https://www.cardgamedb.com/forums/uploads/sw/ffg_rebel-alliance-core.png",
-    'Smugglers and Spies': "https://www.cardgamedb.com/forums/uploads/sw/ffg_smugglers-and-spies-core.png",
-    'Imperial Navy': "https://www.cardgamedb.com/forums/uploads/sw/ffg_imperial-navy-core.png",
-    Sith: "https://www.cardgamedb.com/forums/uploads/sw/ffg_sith-core.png",
-    'Scum and Villainy': "https://www.cardgamedb.com/forums/uploads/sw/ffg_scum-and-villainy-core.png",
-  }
-
   return (
     <div className="container">
       <div className="row">
@@ -47,13 +39,13 @@ const DeckCardList = ({ deckData }) => {
           <div className="container p-2">
             <p className="fw-bold">Objectives</p>
             {
-              objectiveCards.map((card) => <DeckCardListCardRow card={card}/>)
+              objectiveCards.map((card) => <DeckCardListCardRow key={`dclcr-${card.id}`} card={card}/>)
             }
           </div>
         </div>
         <div className="col-md-6">
           <div className="container p-2">
-            <img src={NAMES_TO_SRC[affiliationCardName]} style={{ height: "200px" }}/>
+            <img src={affiliationCardNameToImageSrc(affiliationCardName)} style={{ height: "200px" }}/>
           </div>
         </div>
       </div>
@@ -63,7 +55,7 @@ const DeckCardList = ({ deckData }) => {
             unitCards.length > 0 && <div className="container p-2">
               <p className="fw-bold">Units</p>
               {
-                unitCards.map((card) => <DeckCardListCardRow card={card}/>)
+                unitCards.map((card) => <DeckCardListCardRow key={`dclcr-${card.id}`} card={card}/>)
               }
             </div>
           }
@@ -72,7 +64,7 @@ const DeckCardList = ({ deckData }) => {
             enhancementCards.length > 0 && <div className="container p-2">
               <p className="fw-bold">Enhancements</p>
               {
-                enhancementCards.map((card) => <DeckCardListCardRow card={card}/>)
+                enhancementCards.map((card) => <DeckCardListCardRow key={`dclcr-${card.id}`} card={card}/>)
               }
             </div>
           }
@@ -82,7 +74,7 @@ const DeckCardList = ({ deckData }) => {
             eventCards.length > 0 && <div className="container p-2">
               <p className="fw-bold">Events</p>
               {
-                eventCards.map((card) => <DeckCardListCardRow card={card}/>)
+                eventCards.map((card) => <DeckCardListCardRow key={`dclcr-${card.id}`} card={card}/>)
               }
             </div>
           }
@@ -91,7 +83,7 @@ const DeckCardList = ({ deckData }) => {
             fateCards.length > 0 && <div className="container p-2">
               <p className="fw-bold">Fate</p>
               {
-                fateCards.map((card) => <DeckCardListCardRow card={card}/>)
+                fateCards.map((card) => <DeckCardListCardRow key={`dclcr-${card.id}`} card={card}/>)
               }
             </div>
           }
@@ -100,7 +92,7 @@ const DeckCardList = ({ deckData }) => {
             missionCards.length > 0 && <div className="container p-2">
               <p className="fw-bold">Missions</p>
               {
-                missionCards.map((card) => <DeckCardListCardRow card={card}/>)
+                missionCards.map((card) => <DeckCardListCardRow key={`dclcr-${card.id}`} card={card}/>)
               }
             </div>
           }
