@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import _ from "lodash";
 
 import makeApiRequest from "../api/makeApiRequest";
+import affiliationCardNameToImageSrc from "../util/affiliationCardNameToImageSrc";
 
 const FACTIONS = [
   "Imperial Navy",
@@ -104,15 +105,22 @@ const CreateDeck = () => {
         </div>
       </div>
       <div className="form-group">
-        <div className="dropdown">
-          <label htmlFor="affiliationSelect">Affiliation Card</label>
-          <select className="form-select" id="affiliationSelect" onChange={(evt) => handlePayloadUpdate("affiliation_id", parseInt(evt.target.value))}>
-            {
-              getAffiliationOptions(affiliations, selectedFaction).map((aff) =>
-                <option value={aff.id} key={`aff-${aff.id}`}>{ aff.name }</option>
-              )
-            }
-          </select>
+        <label>Affiliation Card</label>
+        <div className="d-flex">
+          {
+            getAffiliationOptions(affiliations, selectedFaction).map((aff) =>
+              <div key={`aff-radio-${aff.id}`} className="d-flex flex-column justify-content-center align-items-center m-2">
+                <img src={affiliationCardNameToImageSrc(aff.name)} style={{ height: "200px" }}/>
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  checked={createDeckPayload.affiliation_id == aff.id}
+                  aria-label={aff.name}
+                  onChange={() => handlePayloadUpdate("affiliation_id", aff.id)}
+                />
+              </div>
+            )
+          }
         </div>
       </div>
       <div className="form-group">
