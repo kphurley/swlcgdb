@@ -58,9 +58,12 @@ class Deck < ApplicationRecord
   end
   
   def card_blocks_as_hashes_with_quantity
+    # We gotta cache this, because we're gonna need it later
+    return @blocks_with_quantity if @blocks_with_quantity
+
     card_block_attributes = CardBlock.attribute_names - ["created_at", "updated_at"]
 
-    self.card_blocks.pluck_to_hash(*card_block_attributes, "deck_card_blocks.quantity as quantity")
+    @blocks_with_quantity = self.card_blocks.pluck_to_hash(*card_block_attributes, "deck_card_blocks.quantity as quantity")
   end
 
   # This appears to work, but needs two queries, and then a manual merge over the two returned data sets
@@ -97,7 +100,8 @@ class Deck < ApplicationRecord
     card_hashes = []
     distinct_cards.each do |_card|
       card_hash = _card.as_json
-      card_hash["quantity"] = card_name_to_quantity[_card.name]
+      card_block = card_blocks_as_hashes_with_quantity.find { |blk| blk["block"] == card_hash["block"] }
+      card_hash["quantity"] = card_name_to_quantity[_card.name] * card_block["quantity"]
       card_hashes << card_hash
     end
 

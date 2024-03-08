@@ -72,7 +72,7 @@ const CardList = () => {
         className="card-tooltip"
         id="card-tooltip"
         place="right"
-        style={{ backgroundColor: "white", border: "solid", color: "black" }}
+        style={{ backgroundColor: "white", color: "black", boxShadow: "0px 0px 4px grey", maxWidth: "400px" }}
         render={({ content }) => <CardPanel cardData={ JSON.parse(content) } />}
       />
     </div>
