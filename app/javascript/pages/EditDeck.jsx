@@ -235,6 +235,7 @@ const EditDeck = () => {
             <table className="table table-sm">
               <thead>
                 <tr>
+                  <th>#</th>
                   <th>Name</th>
                   <th>Type</th>
                   <th>C.</th>
@@ -250,7 +251,11 @@ const EditDeck = () => {
                   cardList.map((card) =>
                     <tr key={`card-${card.id}`}>
                       <td>
-                        {/* TODO - REPLACE WITH A CLICK TO A MODAL TO ADD TO DECK */}
+                        <button onClick={() => handleUpdateToQuantity(card.card_block_id, 0)} style={{ fontSize: "small" }}>0</button>
+                        <button onClick={() => handleUpdateToQuantity(card.card_block_id, 1)} style={{ fontSize: "small" }}>1</button>
+                        <button onClick={() => handleUpdateToQuantity(card.card_block_id, 2)} style={{ fontSize: "small" }}>2</button>
+                      </td>
+                      <td>
                         <div
                           className="link-primary"
                           data-tooltip-id={"card-tooltip"}

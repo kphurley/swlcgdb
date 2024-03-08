@@ -44,13 +44,16 @@ class Deck < ApplicationRecord
 
         # need to alias id as card_block_id, add deck_id, and keep quantity
         formatted_card_blocks = deck_json[:card_blocks].map do |blk|
+          next if blk[:quantity] == 0
+
           blk[:card_block_id] = blk[:id]
           blk[:deck_id] = self.id
           blk.slice(:card_block_id, :deck_id, :quantity)
         end
 
-        puts formatted_card_blocks
-        DeckCardBlock.create!(formatted_card_blocks)
+        formatted_card_blocks = formatted_card_blocks.reject(&:blank?)
+
+        DeckCardBlock.create!(formatted_card_blocks) if formatted_card_blocks.any?
       end
     end
 
