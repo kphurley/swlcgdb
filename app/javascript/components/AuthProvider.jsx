@@ -8,12 +8,17 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = React.useState(null);
 
   const handleLogin = async (loginPayload) => {
-    const { user } = await makeApiRequest("/login", {
+    const { error, user } = await makeApiRequest("/login", {
       method: 'POST',
       body: loginPayload,
     });
 
-    setUser(user);
+    if (error) {
+      return { error };
+    } else {
+      setUser(user);
+      return { error: null }
+    }
   };
 
   const handleLogout = async () => {
@@ -22,9 +27,10 @@ const AuthProvider = ({ children }) => {
     });
 
     if (error) {
-      console.log("There was an error logging out")
+      return { error };
     } else {
       setUser(null);
+      return { error: null }
     }
   };
 
