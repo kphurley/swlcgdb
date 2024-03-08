@@ -1,6 +1,7 @@
 import React, { useContext, useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import _ from "lodash";
+import moment from "moment";
 
 import makeApiRequest from "../api/makeApiRequest";
 import { AuthContext } from "../components/AuthProvider";
@@ -26,20 +27,23 @@ const Deck = () => {
 
   return (
     <div className="container">
+      <div className="row bg-primary pt-4 mb-2">
+        <h2 className="text-light text-center star-wars-font">{ deckData.name }</h2>
+        <p className="text-light text-end">{ `Last updated: ${deckData && moment(deckData.updated_at).fromNow()}` }</p>
+      </div>
       <div className="row">
-        <h2>{ deckData.name }</h2>
         <div className="col-md-6">
           <DeckCardList deckData={ deckData } />
         </div>
         <div className="col-md-6">
-          <div className="container">
+          <div className="d-flex flex-row-reverse">
             { isUserDeck(deckData, user) && <Link to={`/editDeck/${deckData.id}`}><button type="button" className="btn btn-primary mx-1">Edit</button></Link> }
             {/* TODO <Link><button type="button" className="btn btn-secondary mx-1">Clone</button></Link> */}
           </div>
           <div className="row">
-            <div className="fw-bold">
-              Description
-            </div>
+            <p className="fw-bold fs-4">
+            { deckData?.user?.username }
+            </p>
             <div>
               { deckData.description }
             </div>
