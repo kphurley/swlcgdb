@@ -5,6 +5,7 @@ import { AuthContext } from "../components/AuthProvider";
 
 const Login = () => {
   const [ createUserPayload, setCreateUserPayload ] = useState({});
+  const [ error, setError ] = useState(null);
   const navigate = useNavigate();
   const { onLogin } = useContext(AuthContext);
 
@@ -26,43 +27,56 @@ const Login = () => {
       password: password
     };
 
-    try {
-      await onLogin(loginPayload);
-      navigate("/sets");
-    } catch(err) {
-      // TODO - Better handle this!!
-      console.error("ERROR!", err);
+    // We don't try-catch here because any big blow-ups are now caught by the error boundary
+    const loginResponse = await onLogin(loginPayload);
+
+    if (!loginResponse.error) {
+      navigate("/myDecks");
+    } else {
+      setError(loginResponse.error)
     }
   }, []);
   
   return (
-    <div className="container">
-      <form>
-        <div className="form-group">
-          <label htmlFor="exampleInputEmail1">Email address</label>
-          <input
-            type="email"
-            className="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-            placeholder="Enter email"
-            onChange={(evt) => handlePayloadUpdate("email", evt.target.value)}
-          />
+    <div className="container mt-5 pb-5">
+      <div className="row d-flex justify-content-center">
+        <div className="col-md-6 col-md-push-3">
+          {
+            error && <div className="alert alert-danger" role="alert">{ `Error logging in: ${error}` }</div>
+          }
+          <form>
+            <div className="form-group">
+              <label htmlFor="exampleInputEmail1">Email address</label>
+              <input
+                type="email"
+                className="form-control"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                placeholder="Enter email"
+                onChange={(evt) => handlePayloadUpdate("email", evt.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="exampleInputPassword1">Password</label>
+              <input
+                type="password"
+                className="form-control"
+                id="exampleInputPassword1"
+                placeholder="Password"
+                onChange={(evt) => handlePayloadUpdate("password", evt.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <button className="btn btn-primary" onClick={(evt) => onSubmit(evt, createUserPayload)}>Submit</button>
+            </div>
+            <div className="form-group">
+              <div className="d-flex">
+                <span>Forgot password? &nbsp; &nbsp;</span>
+                <Link to="/forgotPassword">Click here</Link>
+              </div>
+            </div>
+          </form>
         </div>
-        <div className="form-group">
-          <label htmlFor="exampleInputPassword1">Password</label>
-          <input
-            type="password"
-            className="form-control"
-            id="exampleInputPassword1"
-            placeholder="Password"
-            onChange={(evt) => handlePayloadUpdate("password", evt.target.value)}
-          />
-        </div>
-        <button className="btn btn-primary" onClick={(evt) => onSubmit(evt, createUserPayload)}>Submit</button>
-      </form>
-      <div>
-        Forgot password?  <Link className="nav-link" to="/forgotPassword">Click here</Link>
       </div>
     </div>
   );
