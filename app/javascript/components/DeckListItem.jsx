@@ -14,11 +14,9 @@ const DeckListItem = ({ deck, includeAuthor }) => {
   const mapAffiliationNameToImageSrc = (deck) => `/${AFFILIATION_NAME_TO_IMAGE_SRC[deck.affiliation.affiliation_name]}.png`;
 
   return (
-    <div className="row border-top py-2">
-      <div className="col-sm-2 position-relative">
-        <img className="deck-list-item-faction-icon position-absolute top-50 start-50 translate-middle p-2" src={mapAffiliationNameToImageSrc(deck)} />
-      </div>
-      <div className="col-sm-10">
+    <div className="d-flex border-top py-2">
+      <img className="deck-list-item-faction-icon p-2" src={mapAffiliationNameToImageSrc(deck)} />
+      <div className="flex-grow">
         <Link to={`/decks/${deck.id}`}><div>{ deck.name }</div></Link>
         { includeAuthor && <div>{ `by ${deck.user.username}` }</div> }
         <div>{ deck.affiliation?.name }</div>
