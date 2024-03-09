@@ -18,6 +18,7 @@ const CreateDeck = () => {
   const [ affiliations, setAffiliations ] = useState([]);
   const [ selectedFaction, setSelectedFaction ] = useState(FACTIONS[0]);
   const [ createDeckPayload, setCreateDeckPayload ] = useState({});
+  const [ error, setError ] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,14 +66,24 @@ const CreateDeck = () => {
         body: modifiedPayload,
       });
       
-      navigate(`/editDeck/${newDeck.id}`);
+      if (newDeck.error) {
+        setError(newDeck.error)
+      } else {
+        navigate(`/editDeck/${newDeck.id}`);
+      }
     } catch (err) {
-      console.error("ERROR!", err);
+      setError(err);
     }
   }, [affiliations, createDeckPayload, selectedFaction])
 
   return (
     <form>
+      { error &&
+          <div className="alert alert-danger alert-dismissible" role="alert">
+            <div>{ error }</div>
+            <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        } 
       <div className="form-group">
         <label htmlFor="nameOfDeck">Deck Name</label>
         <input

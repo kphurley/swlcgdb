@@ -19,9 +19,12 @@ class ApplicationController < ActionController::Base
     yield
   rescue JWT::DecodeError => exception
     render json: { error: 'Not authorized' }, status: 401
+  rescue ActiveRecord::RecordInvalid => exception
+    render json: { error: exception.message }, status: 400
   rescue ActiveRecord::RecordNotFound => exception
     render json: { error: 'Not found' }, status: 404
   rescue StandardError => exception
+    puts exception.class
     puts exception.message
     puts exception.backtrace
     render json: { error: 'Internal Server Error' }, status: 500

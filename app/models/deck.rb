@@ -6,6 +6,8 @@ class Deck < ApplicationRecord
   has_many :card_blocks, through: :deck_card_blocks
   has_many :cards, through: :card_blocks
 
+  validates :name, presence: true
+
   # Note that the associations above do not account for quantities in the deck
   # For instance - my_deck.cards will just join card_blocks to cards and return that list
   # which isn't really useful for displays
