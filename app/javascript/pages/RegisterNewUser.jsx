@@ -1,43 +1,11 @@
 import React, {useCallback, useState} from "react";
-import {useNavigate} from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 import makeApiRequest from "../api/makeApiRequest";
 
-const RegisterNewUser = () => {
-  const [createUserPayload, setCreateUserPayload] = useState({});
-  const navigate = useNavigate();
-
-  const handlePayloadUpdate = useCallback((key, value) => {
-    const updatedPayload = {
-      ...createUserPayload,
-      [key]: value
-    }
-
-    setCreateUserPayload(updatedPayload);
-  }, [createUserPayload, setCreateUserPayload]);
-
-  const onSubmit = useCallback(async () => {
-    const {username, email, password} = createUserPayload;
-    const finalPayload = {
-      username: username?.trim(),
-      email: email?.trim(),
-      password: password
-    };
-
-    try {
-      const _list = await makeApiRequest("/api/users", {
-        method: 'POST',
-        body: finalPayload,
-      });
-
-      navigate("/signIn");
-    } catch (err) {
-      console.error("ERROR!", err);
-    }
-  }, [createUserPayload])
-
+const NewUserForm = ({ handlePayloadUpdate, onSubmit }) => {
   return (
-    <div className="container">
+    <>
       <h2>Register New User</h2>
       <form>
         <div className="form-group">
@@ -74,6 +42,76 @@ const RegisterNewUser = () => {
         </div>
         <button type="submit" className="btn btn-primary" onClick={onSubmit}>Submit</button>
       </form>
+    </>
+  )
+}
+
+const SuccessMessage = () => {
+  return (
+    <div className="alert alert-success alert-dismissible" role="alert">
+      <div>Your account was created successfully!  Please click below to login:</div>
+      <button type="button" className="btn btn-primary">
+        <Link className="dropdown-item" to="/signIn">Login</Link>
+      </button>
+    </div>
+  )
+};
+
+const RegisterNewUser = () => {
+  const [error, setError] = useState(false);
+  const [userCreated, setUserCreated] = useState(false);
+  const [createUserPayload, setCreateUserPayload] = useState({});
+
+  const handlePayloadUpdate = useCallback((key, value) => {
+    const updatedPayload = {
+      ...createUserPayload,
+      [key]: value
+    }
+
+    setCreateUserPayload(updatedPayload);
+  }, [createUserPayload, setCreateUserPayload]);
+
+  const onSubmit = useCallback(async (evt) => {
+    evt.preventDefault();
+
+    const {username, email, password} = createUserPayload;
+    const finalPayload = {
+      username: username?.trim(),
+      email: email?.trim(),
+      password: password
+    };
+
+    try {
+      const response = await makeApiRequest("/api/users", {
+        method: 'POST',
+        body: finalPayload,
+      });
+
+      if (response.error) {
+        setError(response.error)
+      } else {
+        setUserCreated(true)
+      }
+    } catch (err) {
+      setError(err)
+    }
+  }, [createUserPayload])
+
+  return (
+    <div className="container">
+      {
+        error && (
+          <div className="alert alert-danger alert-dismissible" role="alert">
+            <div>{ error }</div>
+            <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        )
+      }
+      {
+        userCreated
+          ? <SuccessMessage />
+          : <NewUserForm handlePayloadUpdate={handlePayloadUpdate} onSubmit={onSubmit} />
+      }
     </div>
   );
 }
