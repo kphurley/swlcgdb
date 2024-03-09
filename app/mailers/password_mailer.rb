@@ -9,7 +9,7 @@ class PasswordMailer < ApplicationMailer
     @user = params[:user]
     @token = @user.signed_id(purpose: 'password_reset', expires_in: 10.minutes)
 
-    @password_reset_url = "http://localhost:3000/resetPassword/#{@token}"
+    @password_reset_url = Rails.env == 'production' ? "https://swlcgdb.com/resetPassword/#{@token}" : "http://localhost:3000/resetPassword/#{@token}"
 
     mail to: @user.email
   end
