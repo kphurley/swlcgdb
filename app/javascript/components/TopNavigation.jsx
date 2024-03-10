@@ -1,7 +1,10 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Tooltip } from "react-tooltip";
 
 import { AuthContext } from "./AuthProvider";
+import SearchTooltipContent from "./SearchTooltipContent";
+
 
 const TopNavigation = () => {
   const [searchString, setSearchString] = useState("")
@@ -38,6 +41,14 @@ const TopNavigation = () => {
             </li>
           </ul>
           <form className="d-flex" role="search">
+            <div className="d-flex justify-content-center align-items-center">
+              <a
+                className="px-2"
+                data-tooltip-id="top-nav-search-tooltip"
+              >
+                Help
+              </a>
+            </div>
             <input className="form-control me-2 normal-font" onChange={ handleInputChange } type="search" placeholder="Search" aria-label="Search" />
             <Link to={`search/${searchString}`}>
               <button className="btn btn-outline-success" type="submit">Search</button>
@@ -66,6 +77,13 @@ const TopNavigation = () => {
           </div>
         </div>
       </div>
+      <Tooltip
+        id="top-nav-search-tooltip"
+        place="bottom"
+        style={{ zIndex: "100" }}
+      >
+        <SearchTooltipContent />
+      </Tooltip>
     </nav>
   )
 }
