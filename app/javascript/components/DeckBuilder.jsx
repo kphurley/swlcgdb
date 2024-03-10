@@ -2,6 +2,7 @@ import React from "react";
 import { Tooltip } from "react-tooltip";
 
 import CardPanel from "./CardPanel";
+import SearchTooltipContent from "./SearchTooltipContent";
 import getIconsFromIconString from "../util/getIconsFromIconString";
 
 const DeckBuilder = ({
@@ -57,6 +58,14 @@ const DeckBuilder = ({
       <div className="input-group">
         <input className="form-control flex-fill" onChange={ handleInputChange } type="search" placeholder="Search" aria-label="Search" />
         <button className="btn btn-outline-success" onClick={ handleSearchSubmit }>Search</button>
+        <div className="d-flex justify-content-center align-items-center">
+          <a
+            className="px-2"
+            data-tooltip-id="search-tooltip"
+          >
+            Help
+          </a>
+        </div>
       </div>
       {/* EXTRACT THIS - SHARED WITH CardList */}
       <div className="container">
@@ -111,6 +120,15 @@ const DeckBuilder = ({
           style={{ backgroundColor: "white", color: "black", boxShadow: "0px 0px 4px grey", maxWidth: "400px" }}
           render={({ content }) => <CardPanel cardData={ JSON.parse(content) } />}
         />
+
+        { /* The zIndex style is a hack to get around the search button's z-index */ }
+        <Tooltip
+          id="search-tooltip"
+          place="left"
+          style={{ zIndex: "100" }}
+        >
+          <SearchTooltipContent assumeFilterButtons />
+        </Tooltip>
       </div>
     </>
   )

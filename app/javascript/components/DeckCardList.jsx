@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import CardPanel from "../components/CardPanel";
 import affiliationCardNameToImageSrc from "../util/affiliationCardNameToImageSrc";
 
-const DeckCardListCardRow = ({ card }) =>
+const DeckCardListCardRow = ({ card, includeBlockNumber }) =>
   <div className="row">
     <div>
       { `${card.quantity}x ` }
@@ -18,6 +18,7 @@ const DeckCardListCardRow = ({ card }) =>
       >
         {card.name}
       </Link>
+      { includeBlockNumber && ` (${card.block})`}
     </div>
   </div>;
 
@@ -39,7 +40,7 @@ const DeckCardList = ({ deckData }) => {
           <div className="container p-2">
             <p className="fw-bold">Objectives</p>
             {
-              objectiveCards.map((card) => <DeckCardListCardRow key={`dclcr-${card.id}`} card={card}/>)
+              objectiveCards.map((card) => <DeckCardListCardRow key={`dclcr-${card.id}`} card={card} includeBlockNumber />)
             }
           </div>
         </div>
