@@ -4,12 +4,22 @@ import { Tooltip } from "react-tooltip";
 import { Link } from "react-router-dom";
 
 import CardPanel from "../components/CardPanel";
+import QuantityUpdateButtonGroup from "../components/QuantityUpdateButtonGroup";
 import affiliationCardNameToImageSrc from "../util/affiliationCardNameToImageSrc";
 
-const DeckCardListCardRow = ({ card, includeBlockNumber }) =>
+const DeckCardListCardRow = ({ card, cardBlockIdToQuantity, handleUpdateToQuantity, includeBlockNumber }) =>
   <div className="row">
-    <div>
-      { `${card.quantity}x ` }
+    <div className="d-flex">
+      { 
+        (cardBlockIdToQuantity && handleUpdateToQuantity)
+        ? <QuantityUpdateButtonGroup
+            card={card}
+            cardBlockIdToQuantity={cardBlockIdToQuantity}
+            handleUpdateToQuantity={handleUpdateToQuantity}
+          />
+        : <div>{`${card.quantity}x`}&nbsp;</div>
+      }
+      
       <Link
         className="link-primary"
         data-tooltip-id="card-tooltip"
@@ -18,11 +28,11 @@ const DeckCardListCardRow = ({ card, includeBlockNumber }) =>
       >
         {card.name}
       </Link>
-      { includeBlockNumber && ` (${card.block})`}
+      { includeBlockNumber && <div>&nbsp;{`(${card.block})`}</div> }
     </div>
   </div>;
 
-const DeckCardList = ({ deckData }) => {
+const DeckCardList = ({ cardBlockIdToQuantity, handleUpdateToQuantity, deckData }) => {
   const deckCards = deckData?.cards || []
 
   const affiliationCardName = deckData?.affiliation?.name;
@@ -36,15 +46,22 @@ const DeckCardList = ({ deckData }) => {
   return (
     <div className="container">
       <div className="row">
-        <div className="col-md-6">
+        <div className="col-md-8">
           <div className="container p-2">
             <p className="fw-bold">Objectives</p>
             {
-              objectiveCards.map((card) => <DeckCardListCardRow key={`dclcr-${card.id}`} card={card} includeBlockNumber />)
+              objectiveCards.map((card) =>
+                <DeckCardListCardRow
+                  cardBlockIdToQuantity={cardBlockIdToQuantity}
+                  handleUpdateToQuantity={handleUpdateToQuantity}
+                  key={`dclcr-${card.id}`}
+                  card={card}
+                  includeBlockNumber
+                />)
             }
           </div>
         </div>
-        <div className="col-md-6">
+        <div className="col-md-4">
           <div className="container p-2">
             <img src={affiliationCardNameToImageSrc(affiliationCardName)} style={{ height: "200px" }}/>
           </div>

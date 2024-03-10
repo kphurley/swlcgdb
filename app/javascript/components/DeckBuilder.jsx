@@ -2,10 +2,12 @@ import React from "react";
 import { Tooltip } from "react-tooltip";
 
 import CardPanel from "./CardPanel";
+import QuantityUpdateButtonGroup from "./QuantityUpdateButtonGroup";
 import SearchTooltipContent from "./SearchTooltipContent";
 import getIconsFromIconString from "../util/getIconsFromIconString";
 
 const DeckBuilder = ({
+  cardBlockIdToQuantity,
   cardList,
   getStylesFor,
 
@@ -88,9 +90,11 @@ const DeckBuilder = ({
               cardList.map((card) =>
                 <tr key={`card-${card.id}`}>
                   <td>
-                    <button onClick={() => handleUpdateToQuantity(card.card_block_id, 0)} style={{ fontSize: "small" }}>0</button>
-                    <button onClick={() => handleUpdateToQuantity(card.card_block_id, 1)} style={{ fontSize: "small" }}>1</button>
-                    <button onClick={() => handleUpdateToQuantity(card.card_block_id, 2)} style={{ fontSize: "small" }}>2</button>
+                    <QuantityUpdateButtonGroup
+                      card={card}
+                      cardBlockIdToQuantity={cardBlockIdToQuantity}
+                      handleUpdateToQuantity={handleUpdateToQuantity}
+                    />
                   </td>
                   <td>
                     <div

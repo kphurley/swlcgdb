@@ -83,6 +83,7 @@ class Deck < ApplicationRecord
       cards.affiliation,
       cards.block,
       cards.cost,
+      cards.card_block_id,
       cards.card_type,
       cards.combat_icons,
       cards.cost,
