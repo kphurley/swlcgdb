@@ -17,7 +17,7 @@ const EditDeck = () => {
   const [ filterFactionButtonEnabled, setFilterFactionButtonClicked ] = useState(null)
   const [ filterTypeButtonEnabled, setFilterTypeButtonEnabled ] = useState(null)
   const [ modalState, setModalState ] = useState({ enabled: false, cardId: null} )
-  const [ deckUpdatePayload, setDeckUpdatePayload ] = useState({});
+  const [ cardBlockIdToQuantity, setCardBlockIdToQuantity ] = useState({});
   const [ error, setError ] = useState(null);
   const params = useParams();
 
@@ -76,11 +76,11 @@ const EditDeck = () => {
   }, [modalState, setModalState]);
 
   const handleUpdateToQuantity = useCallback((cardBlockId, quantity) => {
-    setDeckUpdatePayload({
-      ...deckUpdatePayload,
+    setCardBlockIdToQuantity({
+      ...cardBlockIdToQuantity,
       [cardBlockId]: quantity
     })
-  }, [deckUpdatePayload, setDeckUpdatePayload]);
+  }, [cardBlockIdToQuantity, setCardBlockIdToQuantity]);
 
   const handleUpdateToInfo = useCallback(async (name, description) => {
     const deck = await makeApiRequest(`/api/decks/${params.id}`, {
@@ -106,7 +106,7 @@ const EditDeck = () => {
     return payload;
   }
 
-  // On Load - set up the deckUpdatePayload and deck contents
+  // On Load - set up the cardBlockIdToQuantity and deck contents
   useEffect(() => {
     async function getDeckById() {
       const deck = await makeApiRequest(`/api/decks/${params.id}`);
@@ -115,7 +115,7 @@ const EditDeck = () => {
         setError(deck.error);
       } else {
         setDeckData(deck);
-        setDeckUpdatePayload(parseUpdatePayload(deck));
+        setCardBlockIdToQuantity(parseUpdatePayload(deck));
         setError(null);
       }
     };
@@ -131,15 +131,15 @@ const EditDeck = () => {
 
   // On an update to the payload - Persist the update and update the deck's contents
   useEffect(() => {
-    // This is very important!  If deckUpdatePayload is empty, don't blow it away!
-    if (Object.keys(deckUpdatePayload).length === 0) return;
+    // This is very important!  If cardBlockIdToQuantity is empty, don't blow it away!
+    if (Object.keys(cardBlockIdToQuantity).length === 0) return;
 
     async function putDeckById() {
-      // The deckUpdatePayload is really just a mapping of card_block_id to quantity
+      // The cardBlockIdToQuantity is really just a mapping of card_block_id to quantity
       // This is a convenience for the front end
       // The api needs this as an array of objects, e.g. [{ card_block_id: 2, quantity: 1 }, ...]
       // TODO - Is this worth it?  It might be ok to edit the deck directly and just PUT changes to it.
-      const formattedPayload = formatDeckUpdatePayload(deckUpdatePayload);
+      const formattedPayload = formatDeckUpdatePayload(cardBlockIdToQuantity);
 
       const deck = await makeApiRequest(`/api/decks/${params.id}`, {
         method: 'PUT',
@@ -155,7 +155,7 @@ const EditDeck = () => {
     };
 
     putDeckById();
-  }, [deckUpdatePayload])
+  }, [cardBlockIdToQuantity])
 
   useEffect(() => {
     async function getQueryStringAndSearch() {
@@ -197,6 +197,7 @@ const EditDeck = () => {
       case "Build":
         return (
           <DeckBuilder
+            cardBlockIdToQuantity={cardBlockIdToQuantity}
             cardList={cardList}
             getStylesFor={getStylesFor}
             handleFilterFactionButtonClicked={handleFilterFactionButtonClicked}
@@ -243,7 +244,11 @@ const EditDeck = () => {
           </div>
         } 
         <div className="col-md-6">
-          <DeckCardList deckData={ deckData } />
+          <DeckCardList
+            cardBlockIdToQuantity={cardBlockIdToQuantity}
+            handleUpdateToQuantity={handleUpdateToQuantity}
+            deckData={deckData}
+          />
         </div>
         <div className="col-md-6">
           <ul className="nav nav-tabs">
