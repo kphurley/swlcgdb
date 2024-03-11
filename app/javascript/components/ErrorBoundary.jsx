@@ -12,7 +12,7 @@ function FallbackComponent({ error }) {
         </button>
       </div>
       <div className="alert alert-info" role="alert">
-        Some helpful info for the developers is below.  Feel free to copy and paste this, along with whatever you were trying to do, in a new issue here: <a href="https://github.com/kphurley/swlcgdb">Github</a>
+        Some helpful info for the developers is below.  Feel free to copy and paste this, along with whatever you were trying to do, in a new issue here: <a href="https://github.com/kphurley/swlcgdb">GitHub</a>
       </div>
       <div className="alert alert-info" role="alert">
         { error.name }

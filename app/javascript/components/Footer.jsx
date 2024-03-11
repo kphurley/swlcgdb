@@ -9,11 +9,11 @@ const Footer = () =>
         Hey!  Thanks so much for stopping by and checking out swlcgdb.com.
         This application is considered an ALPHA release.  As in - things likely WILL break as you try to do things.
 
-        Please report any bugs you find to <a href="https://github.com/kphurley/swlcgdb/issues">Github</a>.
+        Please report any bugs you find to <a href="https://github.com/kphurley/swlcgdb/issues">GitHub</a>.
       </p>
 
       <p>
-        If you appreciate the work done here to create this resource, please consider donating to <a href="https://www.patreon.com/kphurley">my patreon</a>.
+        If you appreciate the work done here to create this resource, please consider donating to <a href="https://www.patreon.com/kphurley">my Patreon</a>.
         I promise every cent donated there will go towards the cost to keep the lights on for the site.
       </p>
 
