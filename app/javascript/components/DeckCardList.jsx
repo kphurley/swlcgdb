@@ -43,12 +43,14 @@ const DeckCardList = ({ cardBlockIdToQuantity, handleUpdateToQuantity, deckData 
   const fateCards = deckCards.filter((c) => c.card_type === "Fate");
   const missionCards = deckCards.filter((c) => c.card_type === "Mission");
 
+  const sumOfCards = (cards) => cards.reduce((prev, card) => prev + card.quantity, 0 );
+
   return (
     <div className="container">
       <div className="row">
         <div className="col-md-8">
           <div className="container p-2">
-            <p className="fw-bold">Objectives</p>
+            <p className="fw-bold">{`Objectives (${sumOfCards(objectiveCards)})`}</p>
             {
               objectiveCards.map((card) =>
                 <DeckCardListCardRow
@@ -71,7 +73,7 @@ const DeckCardList = ({ cardBlockIdToQuantity, handleUpdateToQuantity, deckData 
         <div className="col-md-6">
           {
             unitCards.length > 0 && <div className="container p-2">
-              <p className="fw-bold">Units</p>
+              <p className="fw-bold">{`Units (${sumOfCards(unitCards)})`}</p>
               {
                 unitCards.map((card) => <DeckCardListCardRow key={`dclcr-${card.id}`} card={card}/>)
               }
@@ -80,7 +82,7 @@ const DeckCardList = ({ cardBlockIdToQuantity, handleUpdateToQuantity, deckData 
 
           {
             enhancementCards.length > 0 && <div className="container p-2">
-              <p className="fw-bold">Enhancements</p>
+              <p className="fw-bold">{`Enhancements (${sumOfCards(enhancementCards)})`}</p>
               {
                 enhancementCards.map((card) => <DeckCardListCardRow key={`dclcr-${card.id}`} card={card}/>)
               }
@@ -90,7 +92,7 @@ const DeckCardList = ({ cardBlockIdToQuantity, handleUpdateToQuantity, deckData 
         <div className="col-md-6">
           {
             eventCards.length > 0 && <div className="container p-2">
-              <p className="fw-bold">Events</p>
+              <p className="fw-bold">{`Events (${sumOfCards(eventCards)})`}</p>
               {
                 eventCards.map((card) => <DeckCardListCardRow key={`dclcr-${card.id}`} card={card}/>)
               }
@@ -99,7 +101,7 @@ const DeckCardList = ({ cardBlockIdToQuantity, handleUpdateToQuantity, deckData 
 
           {
             fateCards.length > 0 && <div className="container p-2">
-              <p className="fw-bold">Fate</p>
+              <p className="fw-bold">{`Fate (${sumOfCards(fateCards)})`}</p>
               {
                 fateCards.map((card) => <DeckCardListCardRow key={`dclcr-${card.id}`} card={card}/>)
               }
@@ -108,7 +110,7 @@ const DeckCardList = ({ cardBlockIdToQuantity, handleUpdateToQuantity, deckData 
 
           {
             missionCards.length > 0 && <div className="container p-2">
-              <p className="fw-bold">Missions</p>
+              <p className="fw-bold">{`Missions (${sumOfCards(missionCards)})`}</p>
               {
                 missionCards.map((card) => <DeckCardListCardRow key={`dclcr-${card.id}`} card={card}/>)
               }

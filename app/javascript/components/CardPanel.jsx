@@ -22,6 +22,9 @@ const CardPanel = ({ cardData, includeFlavorText}) => {
         <div className="card-type-and-cost">
           { `${cardData.affiliation}. ${cardData.card_type}. Cost: ${cardData.cost}` }
         </div>
+        <div className="card-resources">
+          { `Resources: ${cardData.resources}` }
+        </div>
         <div className="card-combat-icons">
           { getIconsFromIconString(cardData.combat_icons) }
         </div>

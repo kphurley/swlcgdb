@@ -97,17 +97,19 @@ class Deck < ApplicationRecord
       cards.traits"
     ).order(:name)
 
-    # Then, count how many we have of each name
-    # This gets us a mapping of card name to its count
-    card_name_to_quantity = cards.group(:name).count
+    # Compute a mapping of card names to quantites
+    cards_with_quantities = Card.joins(card_block: :deck_card_blocks)
+                                .select('cards.name', 'SUM(deck_card_blocks.quantity) as quantity')
+                                .where({ 'deck_card_blocks.deck_id' => self.id }).group('cards.name')
+
+    card_name_to_quantity = {}.tap { |h| cards_with_quantities.map { |c| h[c.name] = c.quantity }}
 
     # Iterate over the distinct_cards and apply the needed quantity
     # This is probably performant *enough* given decks are relatively small, but still not ideal
     card_hashes = []
     distinct_cards.each do |_card|
       card_hash = _card.as_json
-      card_block = card_blocks_as_hashes_with_quantity.find { |blk| blk["block"] == card_hash["block"] }
-      card_hash["quantity"] = card_name_to_quantity[_card.name] * card_block["quantity"]
+      card_hash["quantity"] = card_name_to_quantity[_card.name]
       card_hashes << card_hash
     end
 
