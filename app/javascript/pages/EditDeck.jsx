@@ -8,6 +8,7 @@ import CardModal from "../components/CardModal";
 import DeckBuilder from "../components/DeckBuilder";
 import DeckInfoForm from "../components/DeckInfoForm";
 import DeckCardList from "../components/DeckCardList";
+import DeckStats from "../components/DeckStats";
 
 const EditDeck = () => {
   const [ activeTab, setActiveTab ] = useState("Build")
@@ -219,6 +220,10 @@ const EditDeck = () => {
             onSave={handleUpdateToInfo}
           />
         )
+      case "Stats":
+        return (
+          <DeckStats deckData={deckData} />
+        )
     }
   }, [
     cardList,
@@ -257,6 +262,9 @@ const EditDeck = () => {
             </li>
             <li className="nav-item">
               <a className={ activeTab == "Info" ? "nav-link active" : "nav-link"} onClick={() => setActiveTab("Info")}>Info</a>
+            </li>
+            <li className="nav-item">
+              <a className={ activeTab == "Stats" ? "nav-link active" : "nav-link"} onClick={() => setActiveTab("Stats")}>Stats</a>
             </li>
           </ul>
           { getActiveTabComponent(activeTab) }

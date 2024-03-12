@@ -7,6 +7,7 @@ import makeApiRequest from "../api/makeApiRequest";
 import { AuthContext } from "../components/AuthProvider";
 
 import DeckCardList from "../components/DeckCardList";
+import DeckStats from "../components/DeckStats";
 
 // List all of the cards in a deck.
 const Deck = () => {
@@ -34,6 +35,7 @@ const Deck = () => {
       <div className="row">
         <div className="col-md-6">
           <DeckCardList deckData={ deckData } />
+          <DeckStats deckData={ deckData } />
         </div>
         <div className="col-md-6">
           <div className="d-flex flex-row-reverse">
