@@ -80,3 +80,12 @@
 .normal-font {
   font-family: var(--bs-body-font-family);
 }
+
+.hide-for-sm {
+  display: none;
+}
+@media (min-width: 768px) {
+  .hide-for-sm {
+    display: block;
+  }
+}
