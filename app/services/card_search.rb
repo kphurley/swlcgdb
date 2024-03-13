@@ -47,8 +47,9 @@ class CardSearch
 
   def self.map_options_to_conditions(flag, value = nil)
     sanitized_value = Card.sanitize_search_input(value) if value
+    case_insensitive_flag = flag.downcase
 
-    case flag
+    case case_insensitive_flag
     when 'a'
       ["affiliation ILIKE ?", "%#{sanitized_value}%"]
     when 'b'
