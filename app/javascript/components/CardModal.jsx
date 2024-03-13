@@ -27,7 +27,7 @@ export default function CardModal({ cardId, onClose, onCardNameClick, onQuantity
                 <CardPanel includeFlavorText cardData={cardData} />
               </div>
               <div className="col-md-6">
-                { cardData.set && <img src={ getCardImageUrl(cardData) }></img> }
+                { cardData.set && <img className="hide-for-sm" src={ getCardImageUrl(cardData) }></img> }
               </div>
             </div>
             <div className="row border-top py-2">
