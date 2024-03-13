@@ -38,4 +38,4 @@ Make sure to change the `.env` variables to secure your application.
 - Feel free to submit issues if you're interested in some functionality this is missing.
 - For now, I'm only including support for the official FFG cards released, but the xml source I am using to build the DB (the OCTGN data) has a lot of the custom cards released after the FFG period ended - if folks find this useful and find that certain custom sets are needed, please submit an issue.
 
-If you find this useful and appreciate my efforts, I'd happily accept a tip on my [patreon](https://www.patreon.com/kphurley).
+If you find this useful and appreciate my efforts, I'd happily accept a tip on [my Patreon](https://www.patreon.com/kphurley).
