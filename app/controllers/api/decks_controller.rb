@@ -85,6 +85,23 @@ class Api::DecksController < ApplicationController
     end
   end
 
+  # DELETE api/decks/:id
+  # Must be authenticated, which means @current_user should be set prior to this
+  # Returns a 204 status with no content on a successful deletion
+
+  def destroy
+    # Note that this will raise if the deck isn't found, which will return a 404
+    found_deck = Deck.find(params[:id])
+
+    raise 'unauthorized' if found_deck.user_id != @current_user.id
+
+    found_deck.destroy!
+
+    respond_to do |format|
+      format.json { render json: { message: 'success' }, status: :ok }
+    end
+  end
+
   # GET api/decks/byFaction/mostRecent
   # Get the last deck created from each faction
   def most_recent_decks_by_faction

@@ -2,7 +2,7 @@ class Deck < ApplicationRecord
   belongs_to :user
   belongs_to :affiliation
 
-  has_many :deck_card_blocks
+  has_many :deck_card_blocks, dependent: :destroy
   has_many :card_blocks, through: :deck_card_blocks
   has_many :cards, through: :card_blocks
 
