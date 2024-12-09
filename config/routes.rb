@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     resources :cards, only: [:show]
     resources :card_blocks, only: [:show]
     resources :card_sets, only: [:index, :show]
-    resources :decks, only: [:show, :create, :update, :index]
+    resources :decks, only: [:show, :create, :update, :index, :destroy]
     resources :search, only: [:create]
     resources :users, except: [:index]  # Avoid route showing all users
 
