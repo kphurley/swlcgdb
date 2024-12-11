@@ -59,7 +59,7 @@ class Deck < ApplicationRecord
       end
     end
 
-    self.update!(deck_json.slice(:name, :description))
+    self.update!(deck_json.slice(:name, :description, :affiliation_id))
   end
   
   def card_blocks_as_hashes_with_quantity

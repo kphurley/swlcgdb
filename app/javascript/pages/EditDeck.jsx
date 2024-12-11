@@ -83,10 +83,10 @@ const EditDeck = () => {
     })
   }, [cardBlockIdToQuantity, setCardBlockIdToQuantity]);
 
-  const handleUpdateToInfo = useCallback(async (name, description) => {
+  const handleUpdateToInfo = useCallback(async (name, description, selectedAffiliation) => {
     const deck = await makeApiRequest(`/api/decks/${params.id}`, {
       method: 'PUT',
-      body: { name, description }
+      body: { name, description, affiliation_id: selectedAffiliation }
     });
 
     if (deck.error) {
