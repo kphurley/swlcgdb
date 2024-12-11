@@ -77,7 +77,7 @@ class Api::DecksController < ApplicationController
 
     raise 'unauthorized' if found_deck.user_id != @current_user.id
 
-    permitted_params = params.permit(:name, :description, { card_blocks: [:id, :quantity]})
+    permitted_params = params.permit(:name, :description, :affiliation_id, { card_blocks: [:id, :quantity]})
     found_deck.update_from_json!(permitted_params)
 
     respond_to do |format|
