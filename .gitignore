@@ -42,3 +42,7 @@ yarn-error.log
 .env
 
 /config/credentials
+
+# These are used by a script to generate the card images for CDN, but there are too many to commit
+/cards
+/octgn_cards
