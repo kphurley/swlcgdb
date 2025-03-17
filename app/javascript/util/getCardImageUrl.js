@@ -1,19 +1,5 @@
-import _ from "lodash";
-
 export default function getCardImageUrl(cardData) {
-  // Temporary, until we can stand up a better CDN for these
-  const BASE_IMAGE_URL = "http://www.cardgamedb.com/forums/uploads/sw";
+  const BASE_IMAGE_URL = "https://swlcg-card-images.nyc3.digitaloceanspaces.com/cards";
 
-  /*
-    Starting with the set “darkness and light”, the images are named by "set number"
-      (ffg_SWC<set-number>_<block>-<block_number>.png)
-    Prior to that, they’re named like
-      (ffg_<card-name-kebab-case>-<set-name-kebab-case>-<block>-<block_number>.png)
-  */
-
-  if(cardData.set.release_order >= 15) {
-    return `${BASE_IMAGE_URL}/ffg_SWC${cardData.set.release_order}_${cardData.block}-${cardData.block_number}.png`;
-  } else {
-    return `${BASE_IMAGE_URL}/ffg_${_.kebabCase(cardData.name)}-${_.kebabCase(cardData.set.name)}-${cardData.block}-${cardData.block_number}.png`;
-  }
+  return `${BASE_IMAGE_URL}/${cardData.block}-${cardData.block_number}.jpg`;
 }

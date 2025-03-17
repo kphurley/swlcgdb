@@ -35,7 +35,7 @@ const Card = () => {
           <CardInfo includeFlavorText cardData={cardData} />
         </div>
         <div className="col-sm-4">
-          { cardData.set && <img src={ getCardImageUrl(cardData) }></img> }
+          { cardData.set && <img className="card-image" src={ getCardImageUrl(cardData) }></img> }
         </div>
       </div>
       <div className="row border-top py-2">

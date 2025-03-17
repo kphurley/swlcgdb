@@ -81,9 +81,15 @@
   font-family: var(--bs-body-font-family);
 }
 
+.card-image {
+  max-width: 400px;
+  max-height: 400px;
+}
+
 .hide-for-sm {
   display: none;
 }
+
 @media (min-width: 768px) {
   .hide-for-sm {
     display: block;
