@@ -75,3 +75,5 @@ group :development do
   # gem "spring"
 end
 
+
+gem "mini_magick", "~> 5.2"
