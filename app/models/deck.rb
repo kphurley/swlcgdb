@@ -77,7 +77,7 @@ class Deck < ApplicationRecord
     # First, query for all of the cards in the deck, using distinct to cut out the extras, and return a list of hashes
     
     distinct_cards = cards.select(
-      "distinct on(cards.name)
+      "distinct on(cards.name, cards.text)
       cards.id,
       cards.name,
       cards.affiliation,
@@ -100,7 +100,7 @@ class Deck < ApplicationRecord
     # Compute a mapping of card names to quantites
     cards_with_quantities = Card.joins(card_block: :deck_card_blocks)
                                 .select('cards.name', 'SUM(deck_card_blocks.quantity) as quantity')
-                                .where({ 'deck_card_blocks.deck_id' => self.id }).group('cards.name')
+                                .where({ 'deck_card_blocks.deck_id' => self.id }).group('cards.name', 'cards.text')
 
     card_name_to_quantity = {}.tap { |h| cards_with_quantities.map { |c| h[c.name] = c.quantity }}
 
