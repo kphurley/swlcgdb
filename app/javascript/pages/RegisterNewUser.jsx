@@ -58,7 +58,7 @@ const SuccessMessage = () => {
 };
 
 const RegisterNewUser = () => {
-  const [error, setError] = useState(false);
+  const [errors, setErrors] = useState(false);
   const [userCreated, setUserCreated] = useState(false);
   const [createUserPayload, setCreateUserPayload] = useState({});
 
@@ -87,23 +87,23 @@ const RegisterNewUser = () => {
         body: finalPayload,
       });
 
-      if (response.error) {
-        setError(response.error)
+      if (response.errors?.length > 0) {
+        setErrors(response.errors)
       } else {
+        setErrors(false)
         setUserCreated(true)
       }
     } catch (err) {
-      setError(err)
+      setErrors(err)
     }
   }, [createUserPayload])
 
   return (
     <div className="container">
       {
-        error && (
+        errors && (
           <div className="alert alert-danger alert-dismissible" role="alert">
-            <div>{ error }</div>
-            <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div>{ `The submission encountered the following errors:  ${errors.join(", ")}` }</div>
           </div>
         )
       }
